@@ -1,0 +1,211 @@
+/* ===== ESTILOS GENERALES ===== */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #eef6fb;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.recuperar-container {
+    background-color: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* ===== TÍTULO Y TEXTO ===== */
+.recuperar-container h2 {
+    color: #005c8a;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+
+.recuperar-container p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+/* ===== FORMULARIO ===== */
+form label {
+    display: block;
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #333;
+}
+
+form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s ease;
+}
+
+form input:focus {
+    border-color: #005c8a;
+    outline: none;
+}
+
+/* ===== BOTÓN ===== */
+form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #005c8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+    background-color: #004569;
+    transform: scale(1.02);
+}
+
+/* ===== ENLACE DE VOLVER ===== */
+.volver a {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #005c8a;
+    text-decoration: none;
+    transition: text-decoration 0.2s ease;
+}
+
+.volver a:hover {
+    text-decoration: underline;
+}
+
+/* ===== ANIMACIÓN ENTRADA ===== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== MENSAJE DE ÉXITO / ERROR ===== */
+#mensaje {
+    font-size: 14px;
+    margin-top: 10px;
+    min-height: 20px;
+}
+
+/* ========== RESPONSIVE DESIGN PARA TABLETS Y CELULARES ========== */
+
+@media (max-width: 1024px) {
+    header nav a {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+
+    .botones a {
+        font-size: 14px;
+        padding: 10px 18px;
+    }
+
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .hero {
+        padding: 100px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 15px;
+    }
+
+    header nav {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    header nav a {
+        width: 100%;
+        margin: 5px 0;
+        text-align: left;
+        padding: 10px;
+    }
+
+    .botones {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .botones a {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .hero video {
+        object-fit: cover;
+        height: 100vh;
+        width: 100%;
+    }
+
+    .hero {
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .hero h1 {
+        font-size: 24px;
+    }
+
+    .hero p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    header nav a img {
+        width: 18px;
+    }
+
+    .hero h1 {
+        font-size: 20px;
+    }
+
+    .hero p {
+        font-size: 13px;
+    }
+
+    .botones a {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+}

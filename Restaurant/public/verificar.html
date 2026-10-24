@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar</title>
+    <style>
+        .verify-section {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .verify-btn {
+            background: linear-gradient(45deg, #ff4b4b, #ff7979);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .verify-btn:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #ff7979, #ff4b4b);
+        }
+
+        .verify-btn.small {
+            width: auto;
+            padding: 7px 12px;
+            margin-left: 8px;
+        }
+
+        .codigo-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .codigo-box input {
+            width: 120px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .codigo-box input:focus {
+            border-color: #ff4b4b;
+            box-shadow: 0 0 5px rgba(255, 75, 75, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="verify-section">
+        <button class="verify-btn" onclick="enviarCodigo()">Enviar código</button>
+
+        <div class="codigo-box">
+            <input id="codigoInput" type="text" maxlength="6" placeholder="Código">
+            <button class="verify-btn small" onclick="verificarCodigo()">Verificar</button>
+        </div>
+        <p id="estadoVerificacion" style="margin-top:10px; font-weight:bold;"></p>
+    </div>
+<script>
+async function enviarCodigo() {
+
+    const correo = localStorage.getItem("correoPendienteVerificacion");
+
+    if (!correo) {
+        alert("❌ No hay un correo pendiente de verificación.");
+        return;
+    }
+
+    const res = await fetch("/enviar-codigo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo })
+    });
+
+    const data = await res.json();
+
+    document.getElementById("estadoVerificacion").textContent = data.message;
+}
+
+async function verificarCodigo() {
+
+    const correo = localStorage.getItem("correoPendienteVerificacion");
+    const codigo = document.getElementById("codigoInput").value;
+
+    const res = await fetch("/verificar-codigo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ correo, codigo })
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+        document.getElementById("estadoVerificacion").textContent = "✔ Correo verificado correctamente";
+        document.getElementById("estadoVerificacion").style.color = "#4fff88";
+
+        // Opcional: guardar este correo ya como verificado
+        localStorage.setItem("usuarioLogueado", correo);
+    } else {
+        document.getElementById("estadoVerificacion").textContent = "❌ Código incorrecto";
+        document.getElementById("estadoVerificacion").style.color = "#ff6961";
+    }
+}
+
+</script>
+
+</body>
+</html>

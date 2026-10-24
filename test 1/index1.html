@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Theory - System Integration</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alata&family=Amethysta&family=Major+Mono+Display&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. SYSTEM VARIABLES --- */
+        :root {
+            --background: oklch(1.0000 0 0);
+            --foreground: oklch(0.2167 0.0015 197.0424);
+            --card: oklch(1.0000 0 0);
+            --muted: oklch(0.9702 0 0);
+            --muted-foreground: oklch(0.5555 0 0);
+            --border: oklch(0.9219 0 0);
+            
+            --font-sans: 'Alata', sans-serif;
+            --font-serif: 'Amethysta', serif;
+            --font-mono: 'Major Mono Display', monospace;
+
+            --radius: 2.175rem;
+            --shadow: 0 1px 9.5px 0px hsl(0 0% 0% / 1.00);
+
+            --neon-cyan: oklch(0.9 0.2 190);
+            --neon-green: oklch(0.8 0.3 140);
+            --neon-magenta: oklch(0.7 0.3 320);
+            --neon-blue: oklch(0.6 0.3 260);
+        }
+
+        /* DARK THEME */
+        .dark {
+            --background: oklch(0.05 0.01 195); 
+            --foreground: oklch(0.9851 0 0);
+            --card: oklch(0.1 0.01 195 / 0.4); 
+            --muted: oklch(0.2 0 0);
+            --muted-foreground: oklch(0.7 0 0);
+            --border: oklch(0.2 0 0);
+        }
+
+        /* --- 2. RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- 3. LOADER (ESTILO NUEVO INTEGRADO) --- */
+        .loader-container {
+            position: fixed; inset: 0;
+            background: var(--background);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease-out;
+        }
+
+        /* Animación de Uiverse */
+        .loader-anim {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            --color: var(--foreground);
+            --animation: 2s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+
+        .loader-anim .circle {
+            display: flex; align-items: center; justify-content: center;
+            position: relative; width: 20px; height: 20px;
+            border: solid 2px var(--color); border-radius: 50%;
+            margin: 0 10px; background-color: transparent;
+            animation: circle-keys var(--animation);
+        }
+
+        .loader-anim .circle .dot {
+            position: absolute; transform: translate(-50%, -50%);
+            width: 16px; height: 16px; border-radius: 50%;
+            background-color: var(--color);
+            animation: dot-keys var(--animation);
+        }
+
+        .loader-anim .circle .outline {
+            position: absolute; transform: translate(-50%, -50%);
+            width: 20px; height: 20px; border-radius: 50%;
+            animation: outline-keys var(--animation);
+        }
+
+        .circle:nth-child(2) { animation-delay: 0.3s; }
+        .circle:nth-child(3) { animation-delay: 0.6s; }
+        .circle:nth-child(4) { animation-delay: 0.9s; }
+        .circle:nth-child(5) { animation-delay: 1.2s; }
+        .circle:nth-child(2) .dot { animation-delay: 0.3s; }
+        .circle:nth-child(3) .dot { animation-delay: 0.6s; }
+        .circle:nth-child(4) .dot { animation-delay: 0.9s; }
+        .circle:nth-child(5) .dot { animation-delay: 1.2s; }
+        .circle:nth-child(1) .outline { animation-delay: 0.9s; }
+        .circle:nth-child(2) .outline { animation-delay: 1.2s; }
+        .circle:nth-child(3) .outline { animation-delay: 1.5s; }
+        .circle:nth-child(4) .outline { animation-delay: 1.8s; }
+        .circle:nth-child(5) .outline { animation-delay: 2.1s; }
+
+        @keyframes circle-keys {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes dot-keys {
+            0% { transform: scale(1); }
+            50% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        @keyframes outline-keys {
+            0% { transform: scale(0); outline: solid 20px var(--color); outline-offset: 0; opacity: 1; }
+            100% { transform: scale(1); outline: solid 0 transparent; outline-offset: 20px; opacity: 0; }
+        }
+
+        .loader-percent {
+            font-family: var(--font-mono);
+            font-size: 1.2rem;
+            color: var(--muted-foreground);
+            margin-top: 10px;
+        }
+
+        /* --- 4. CANVAS & CURSOR --- */
+        #canvas-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0;
+            transition: opacity 1.5s ease 0.5s;
+        }
+        body.loaded #canvas-container { opacity: 0.6; }
+
+        .cursor-dot {
+            position: fixed; top: 0; left: 0; width: 6px; height: 6px;
+            background: var(--foreground); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 9999;
+        }
+        .cursor-ring {
+            position: fixed; top: 0; left: 0; width: 40px; height: 40px;
+            border: 1px solid var(--muted-foreground); border-radius: 50%;
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 9998;
+            transition: width 0.3s ease, height 0.3s ease, border-color 0.3s;
+        }
+        body.hovering .cursor-ring {
+            width: 60px; height: 60px; border-color: var(--neon-cyan);
+            background: oklch(0.9 0.2 190 / 0.05); backdrop-filter: blur(2px);
+        }
+
+        /* --- 6. LAYOUT --- */
+        .scene {
+            max-width: 1440px; margin: 0 auto; padding: 120px 6vw;
+            opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease;
+        }
+        body.loaded .scene { opacity: 1; transform: translateY(0); }
+
+        header.hero { margin-bottom: 120px; }
+        .hero-uptitle { font-family: var(--font-mono); color: var(--neon-cyan); font-size: 0.8rem; margin-bottom: 20px; display: block; }
+        .hero h1 { font-size: clamp(3rem, 8vw, 7rem); line-height: 0.95; font-weight: 400; text-transform: uppercase; letter-spacing: -0.04em; }
+        .hero-desc { max-width: 500px; margin-top: 40px; color: var(--muted-foreground); font-size: 1.1rem; line-height: 1.6; }
+
+        /* --- 7. CARDS (FIXED & 3D) --- */
+        .grid {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 2.5rem;
+            perspective: 1000px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            height: 550px;
+            display: flex; flex-direction: column;
+            position: relative; 
+            transform-style: preserve-3d;
+            transform: rotateX(0) rotateY(0);
+            will-change: transform;
+        }
+
+        .card-visual {
+            flex: 1.2; 
+            position: relative; 
+            overflow: hidden;
+            border-radius: var(--radius) var(--radius) 0 0;
+            transform: translateZ(0px);
+            transition: transform 0.5s ease;
+        }
+
+        .card-visual img {
+            width: 100%; height: 100%; 
+            object-fit: cover; 
+            position: absolute; top: 0; left: 0; z-index: 0;
+            transition: transform 0.5s ease;
+        }
+
+        /* Overlay */
+        .card-visual::after {
+            content: ''; position: absolute; inset: 0; z-index: 1;
+            background: radial-gradient(circle at 50% 120%, oklch(1 0 0 / 0.1), transparent 70%);
+            transition: opacity 0.5s; opacity: 0.3; pointer-events: none;
+        }
+
+        .card-content {
+            flex: 1; 
+            padding: 2.5rem; 
+            border-top: 1px solid var(--border);
+            display: flex; flex-direction: column; justify-content: space-between;
+            background: linear-gradient(to bottom, var(--card), oklch(0 0 0 / 0.95)); 
+            position: relative; z-index: 2;
+            transform: translateZ(0px);
+            transition: transform 0.5s ease;
+            border-radius: 0 0 var(--radius) var(--radius);
+        }
+
+        /* --- 3D POP-OUT --- */
+        .card.hovering-card .card-visual { transform: translateZ(50px); }
+        .card.hovering-card .card-content { transform: translateZ(30px); }
+        .card:hover .card-visual img { transform: scale(1.1); }
+
+        .card-meta { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted-foreground); display: flex; justify-content: space-between; margin-bottom: 1rem; text-transform: lowercase; }
+        .card h2 { font-size: 2rem; font-weight: 400; text-transform: uppercase; margin-bottom: 0.5rem; color: var(--foreground); }
+        .card p { font-size: 0.95rem; color: var(--muted-foreground); line-height: 1.5; }
+        .card-link { font-family: var(--font-mono); font-size: 0.7rem; text-transform: lowercase; color: var(--foreground); align-self: flex-start; position: relative; padding-bottom: 5px; }
+        .card-link::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 1px; background: currentColor; transition: width 0.4s ease; }
+        .card:hover .card-link::after { width: 100%; }
+
+        /* --- 8. ACCENTS --- */
+        .card.accent-magenta:hover { border-color: var(--neon-magenta); }
+        .card.accent-magenta .card-link { color: var(--neon-magenta); }
+        
+        .card.accent-green:hover { border-color: var(--neon-green); }
+        .card.accent-green .card-link { color: var(--neon-green); }
+
+        .card.accent-blue:hover { border-color: var(--neon-blue); }
+        .card.accent-blue .card-link { color: var(--neon-blue); }
+
+        @media (max-width: 768px) {
+            .cursor-dot, .cursor-ring { display: none; }
+            * { cursor: auto; }
+            .hero h1 { font-size: 3rem; }
+            .scene { padding-top: 80px; }
+            .card { height: auto; min-height: 480px; }
+            .card-visual { min-height: 250px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <div class="loader-container">
+        <div class="loader-anim">
+            <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+            <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+            <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+            <div class="circle"><div class="dot"></div><div class="outline"></div></div>
+        </div>
+        <span class="loader-percent">0%</span>
+    </div>
+
+    <canvas id="canvas-container"></canvas>
+
+    <main class="scene">
+        <header class="hero">
+            <span class="hero-uptitle">experiencias digitales</span>
+            <h1>Active<br>Theory<br>System</h1>
+            <p class="hero-desc">Integración de diseño atómico utilizando espacio de color OKLCH y tipografía modular.</p>
+        </header>
+
+        <section class="grid">
+            
+            <article class="card accent-magenta interactable">
+                <div class="card-visual">
+                    <img src="imagenes/prometeo.jpg" alt="Prometheus">
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-meta">
+                            <span>WEBGL</span><span>01</span>
+                        </div>
+                        <h2>Prometheus</h2>
+                        <p>Visualización de datos de espacio profundo.</p>
+                    </div>
+                    <span class="card-link">ver estudio</span>
+                </div>
+            </article>
+
+            <article class="card accent-green interactable">
+                <div class="card-visual">
+                    <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop" alt="Genesis">
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-meta">
+                            <span>AR / VR</span><span>02</span>
+                        </div>
+                        <h2>Genesis</h2>
+                        <p>Conectando arte físico con realidad aumentada.</p>
+                    </div>
+                    <span class="card-link">entrar</span>
+                </div>
+            </article>
+
+            <article class="card accent-blue interactable">
+                <div class="card-visual">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=800&auto=format&fit=crop" alt="Sonic">
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-meta">
+                            <span>AUDIO</span><span>03</span>
+                        </div>
+                        <h2>Sonic Bloom</h2>
+                        <p>Instalación sonora reactiva.</p>
+                    </div>
+                    <span class="card-link">escuchar</span>
+                </div>
+            </article>
+
+            <article class="card interactable">
+                <div class="card-visual">
+                    <img src="imagenes/void.jpg" alt="Void">
+                </div>
+                <div class="card-content">
+                    <div>
+                        <div class="card-meta">
+                            <span>LAYOUT</span><span>04</span>
+                        </div>
+                        <h2>Void Structure</h2>
+                        <p>Diseño experimental.</p>
+                    </div>
+                    <span class="card-link">explorar</span>
+                </div>
+            </article>
+
+        </section>
+    </main>
+
+    <script>
+        // --- LOADER Y SISTEMA DE CARGA ---
+        document.addEventListener("DOMContentLoaded", () => {
+            let percent = 0;
+            const loaderContainer = document.querySelector(".loader-container");
+            const percentText = document.querySelector(".loader-percent");
+
+            const interval = setInterval(() => {
+                percent += Math.floor(Math.random() * 10) + 1; 
+                if (percent > 100) percent = 100;
+                percentText.textContent = percent + "%";
+
+                if (percent === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loaderContainer.style.opacity = "0";
+                        loaderContainer.style.pointerEvents = "none"; 
+                        document.body.classList.add('loaded');
+                    }, 500);
+                    setTimeout(() => loaderContainer.remove(), 1500);
+                }
+            }, 50);
+        });
+
+        // --- CURSOR CUSTOM ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorRing = document.querySelector('.cursor-ring');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.left = `${mouseX}px`; cursorDot.style.top = `${mouseY}px`;
+        });
+
+        const animateCursor = () => {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`;
+            requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        document.querySelectorAll('.interactable').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // --- 3D CARD EFFECT ---
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / 20) * -1;
+                const rotateY = (x - centerX) / 20;
+
+                card.style.transition = 'none'; 
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('hovering-card');
+                setTimeout(() => card.style.transition = 'none', 100); 
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('hovering-card');
+                card.style.transition = 'transform 0.5s ease';
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            });
+        });
+
+        // --- CANVAS BACKGROUND ---
+        const canvas = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); };
+        window.addEventListener('resize', resize);
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if(this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if(this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for(let i=0; i < 60; i++) particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            // Simple connections
+            for(let a=0; a<particles.length; a++){
+                for(let b=a; b<particles.length; b++){
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const dist = Math.sqrt(dx*dx+dy*dy);
+                    if(dist < 100) {
+                        ctx.strokeStyle = `rgba(255,255,255,${0.1 - dist/1000})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath(); ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y); ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        resize(); animate();
+    </script>
+</body>
+</html>

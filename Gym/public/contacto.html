@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto</title>
+    <link rel="icon" type="images/png" href="Logo/Logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+ body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a3d3d;
+      padding-top: 100px
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+    }
+    .logo {
+      color: #00ff99;
+      font-size: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #00ff99;
+    }
+        #contacto {
+  background-color: #0a3d3d;
+  padding: 50px 20px;
+  text-align: center;
+  color: #00ff99;
+}
+
+.contacto-titulo {
+  font-size: 32px;
+  margin-bottom: 10px;
+  font-family: 'Permanent Marker', cursive;
+}
+
+.contacto-texto {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #ccffe6;
+}
+
+.form-contacto {
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-contacto input,
+.form-contacto textarea {
+  padding: 10px;
+  border: 1px solid #00ff99;
+  background-color: #002f2f;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+  resize: none;
+}
+
+.form-contacto textarea {
+  height: 100px;
+}
+
+.form-contacto button {
+  background-color: #00ff99;
+  color: #000;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-contacto button:hover {
+  background-color: #00cc77;
+  transform: scale(1.03);
+}
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      font-size: 24px;
+      color: #00ff99;
+      cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <header>
+          <div class="logo">
+    <a href="index.html" style="color: #00ff99; text-decoration: none;">Barriga Fit</a>
+  </div>
+        <nav>
+          <ul>
+                        <li>
+              <a href="index.html" style="color: #00ff99; text-decoration: none;">
+              <span class="material-symbols-outlined" style="vertical-align: middle;">home</span>
+              </a>
+            </li>
+            <li>
+              <span class="material-symbols-outlined" onclick="goBack()" style="cursor: pointer;">arrow_back_ios</span>
+            </li>
+            <li>
+              <span class="material-symbols-outlined" onclick="goForward()" style="cursor: pointer;">arrow_forward_ios</span>
+            </li>
+            <li><a href="Index.html">Inicio</a></li>
+            <li><a href="nostros.html">Acerca de Nosotros</a></li>
+            <li><a href="producto.html">Productos</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="contacto.html">Contáctanos</a></li>
+            <li><a href="login.html">Salir</a></li>
+            <li><a href="login.html">Login/Register</a></li>
+          </ul>
+        </nav>
+      </header>
+  <section id="contacto">
+  <h2 class="contacto-titulo">Contáctanos</h2>
+  <p class="contacto-texto">¿Tienes dudas, sugerencias o quieres empezar tu transformación? Escríbenos y te responderemos pronto.</p>
+
+  <form class="form-contacto" id="contactoForm">
+    <input type="text" id="nombre" name="nombre" placeholder="Nombre completo" required>
+    <input type="email" id="correo" name="correo" placeholder="Correo electrónico" required>
+    <textarea id="mensaje" name="mensaje" placeholder="Escribe tu mensaje aquí..." required></textarea>
+    <button type="submit">Enviar mensaje</button>
+  </form>
+</section>
+<script>
+  const contactoForm = document.getElementById('contactoForm');
+
+  contactoForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value;
+    const correo = document.getElementById('correo').value;
+    const mensaje = document.getElementById('mensaje').value;
+
+    try {
+      // Build API URL: if the page was opened via file://, point to localhost explicitly
+      const apiUrl = location.protocol === 'file:'
+        ? 'http://localhost:3000/api/contacto'
+        : `${location.protocol}//${location.host}/api/contacto`;
+      console.log('Sending contacto to', apiUrl);
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ nombre, correo, mensaje })
+      });
+
+      // Try to parse JSON safely; fall back to text if server returned HTML (404 page)
+      let data;
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        try { data = JSON.parse(text); } catch (e) { data = { error: text }; }
+      }
+
+      if (response.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Mensaje enviado',
+          text: 'Gracias por contactarnos, te responderemos pronto',
+          background: '#0a3d3d',
+          color: '#00ff99',
+          confirmButtonColor: '#00ff99',
+          confirmButtonText: 'OK',
+          iconColor: '#00ff99'
+        });
+        contactoForm.reset();
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: data && data.error ? data.error : 'Error en el servidor',
+          background: '#0a3d3d',
+          color: '#00ff99',
+          confirmButtonColor: '#ff4141',
+          confirmButtonText: 'OK',
+          iconColor: '#ff4141'
+        });
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Error en la conexión con el servidor',
+        background: '#0a3d3d',
+        color: '#00ff99',
+        confirmButtonColor: '#ff4141',
+        confirmButtonText: 'OK',
+        iconColor: '#ff4141'
+      });
+    }
+  });
+
+  function goBack() {
+    window.history.back();
+  }
+  function goForward() {
+    window.history.forward();
+  }
+  // Autocompletar nombre y correo si hay sesión activa
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      const resp = await fetch('/api/verificar');
+      const info = await resp.json();
+      if (info.autenticado) {
+        if (info.usuario) document.getElementById('nombre').value = info.usuario;
+        if (info.correo) document.getElementById('correo').value = info.correo;
+      }
+    } catch (err) {
+      console.error('No se pudo verificar sesión:', err);
+    }
+  });
+</script>
+<script src="sesion.js"></script>
+</body>
+</html>

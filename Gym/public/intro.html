@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Intro</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+    }
+    video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+    #soundBtn, #skip {
+      position: absolute;
+      z-index: 10;
+      padding: 10px 16px;
+      background: rgba(0,0,0,.6);
+      color: #00ff99;
+      border: 1px solid #00ff99;
+      cursor: pointer;
+    }
+    #soundBtn { bottom: 20px; left: 20px; }
+    #skip { bottom: 20px; right: 20px; }
+  </style>
+</head>
+<body>
+
+<video id="introVideo" autoplay muted playsinline>
+  <source src="video/1.mp4" type="video/mp4">
+</video>
+
+<button id="soundBtn">🔊 Activar sonido</button>
+<button id="skip">Saltar</button>
+
+<script>
+  const video = document.getElementById('introVideo');
+  const btnSound = document.getElementById('soundBtn');
+  const btnSkip = document.getElementById('skip');
+
+  function irInicio() {
+    localStorage.setItem('introVista', 'true');
+    window.location.href = 'index.html';
+  }
+
+  video.addEventListener('ended', irInicio);
+  setTimeout(irInicio, 8000);
+
+  btnSkip.onclick = irInicio;
+
+  btnSound.onclick = () => {
+    video.muted = false;
+    video.volume = 1;
+    btnSound.style.display = 'none';
+  };
+</script>
+
+</body>
+</html>

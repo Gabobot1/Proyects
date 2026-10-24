@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacto</title>
+  <link rel="stylesheet" href="CSS/ContactoStyle.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{
+      background-color: #080808 !important;
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <header>
+    <div>
+      <img src="Imagenes/logo.png" alt="Logo Madurada" height="40">
+    </div>
+    <nav>
+      <a href="LOGIN.html">Iniciar Secion</a>
+      <a href="Menu.html">Nuestro Restaurante</a>
+      <a href="Carta.html">Carta</a>
+      <a href="CarneAsada.html">Carnes</a>
+      <a href="CervezadeBodega.html">Cerveza de bodega</a>
+      <a href="Contacto.html">Contacto</a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/instagram.png" alt="Instagram" width="20"></a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/facebook.png" alt="Facebook" width="20"></a>
+      <a href="carrito.html">
+        <img src="Imagenes/carrito.png" alt="Carrito" width="25" title="Ver carrito"></a>
+      <a href="LOGIN.html" onclick="cerrarSesion()">Cerrar sesión</a>
+
+    </nav>
+  </header>
+  <main class="contenido">
+    <h2>Contáctanos</h2>
+</div>
+    <p class="intro">¿Tienes alguna duda, sugerencia o quieres reservar? Escríbenos usando el formulario o visita
+      nuestras redes.</p>
+      <div id="alertContainer" class="container mt-3"></div>
+    <form id="formulario" class="formulario">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required>
+
+      <label for="correo">Correo electrónico:</label>
+      <input type="email" id="correo" name="correo" required>
+
+      <label for="asunto">Asunto:</label>
+      <input type="text" id="asunto" name="asunto" required>
+
+      <label for="mensaje">Mensaje:</label>
+      <textarea id="mensaje" name="mensaje" rows="5" required></textarea>
+
+      <button id="btnContacto" type="submit">Enviar</button>
+    </form>
+  </main>
+
+  <footer>
+    &copy; 2025 Restaurante | Todos los derechos reservados
+  </footer>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+
+  const loginLink = document.querySelector('a[href="LOGIN.html"]');
+  if (usuario && loginLink) {
+    loginLink.style.display = 'none';
+  }
+  document.getElementById("nombre").value =
+    localStorage.getItem("nombreUsuario") || "";
+
+  document.getElementById("correo").value =
+    localStorage.getItem("correoUsuario") || "";
+
+  document.getElementById("formulario").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+      nombre: document.getElementById("nombre").value,
+      correo: document.getElementById("correo").value,
+      asunto: document.getElementById("asunto").value,
+      mensaje: document.getElementById("mensaje").value
+    };
+
+    const res = await fetch("/enviar-contacto", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    const respuesta = await res.json();
+    const alertHtml = `
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <strong>Mensaje enviado:</strong> ${respuesta.message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+`;
+
+document.getElementById("alertContainer").innerHTML = alertHtml;
+
+  });
+});
+</script>
+
+
+</body>
+
+
+</html>

@@ -1,0 +1,395 @@
+@keyframes fadeInBody {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
+body {
+  animation: fadeInBody 0.6s ease-out;
+  margin: 0;
+  padding-top: 90px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #080808;
+  color: white;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #8B0000;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  /* LOGO IZQ — MENÚ DERECHA */
+
+  padding: 15px 30px;  /* MÁS ALTURA */
+  height: 90px;        /* ALTURA PERFECTA */
+
+  z-index: 1000;
+  box-shadow: 0 0 12px rgba(0,0,0,0.6);
+}
+nav {
+  display: flex;
+  justify-content: flex-end;   /* ⭐ A la derecha */
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  padding-right: 40px;         /* ⭐ Espacio desde el borde */
+}
+
+nav a {
+  background: linear-gradient(to right, #c57c3c, #a15d2c);
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 0 10px rgba(255, 200, 120, 0.25);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+/* EFECTO DORADO BRILLANTE (reflejo) */
+nav a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: .5s;
+}
+
+/* EFECTO AL HACER HOVER */
+nav a:hover {
+  transform: translateY(-3px) scale(1.05);
+  color: #ffe3a1;
+  box-shadow: 0 0 15px rgba(255, 210, 140, 0.45);
+}
+
+/* ===== BOTONES DE REDES PREMIUM ===== */
+
+.redes-btn {
+    background: linear-gradient(to bottom, #c57c3c, #a15d2c);
+    padding: 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 45px;
+    height: 45px;
+
+    box-shadow: 0 0 10px rgba(255, 180, 90, 0.25);
+    cursor: pointer;
+    transition: .3s ease;
+    
+    position: relative;
+    overflow: hidden;
+}
+
+/* ICONOS */
+.redes-btn img {
+    width: 24px;
+    height: 24px;
+    transition: .3s ease;
+}
+
+/* ===== EFECTO HOVER ===== */
+.redes-btn:hover {
+    transform: translateY(-4px) scale(1.07);
+    box-shadow: 0 0 18px rgba(255, 200, 110, 0.45);
+    border: 1px solid rgba(255, 220, 160, 0.7);
+}
+
+/* Brillo elegante en hover */
+.redes-btn::after {
+    content: "";
+    position: absolute;
+    top: -150%;
+    left: -150%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 240, 180, 0.4),
+        transparent 60%
+    );
+    opacity: 0;
+    transition: .5s ease;
+}
+
+.redes-btn:hover::after {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Zoom suave del icono */
+.redes-btn:hover img {
+    transform: scale(1.2);
+}
+
+/* ===== EFECTO RIPPLE AL DAR CLICK ===== */
+.redes-btn:active::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 240, 190, 0.5);
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    animation: ripple .5s ease-out forwards;
+}
+
+@keyframes ripple {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(15); opacity: 0; }
+}
+
+/* PASO DEL REFLEJO */
+nav a:hover::after {
+  left: 120%;
+}
+
+/* Borde exterior dorado animado */
+nav a:hover {
+  border: 1px solid rgba(255, 220, 150, 0.8);
+}
+
+
+.contenido {
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+
+.contenido h2 {
+  color: #ffcc7a;
+  font-size: 40px;
+  font-weight: bold;
+  padding-top: 50px;
+  text-shadow: 0 0 12px #000;
+  margin-bottom: 10px;
+}
+
+.intro {
+  color: #c7b999;
+  margin-bottom: 30px;
+}
+
+.formulario {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 35px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 18px;
+  border: 1px solid rgba(255,200,120,0.25);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 25px rgba(255,200,120,0.15);
+}
+
+/* ===== LABEL ===== */
+.formulario label {
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  color: #e8c27c;
+  margin-bottom: 6px;
+  text-shadow: 0 0 5px #000;
+}
+
+/* ===== CAMPOS ===== */
+.formulario input,
+.formulario textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,200,120,0.4);
+  padding: 12px;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  margin-bottom: 18px;
+  transition: .3s ease;
+}
+
+.formulario input:focus,
+.formulario textarea:focus {
+  outline: none;
+  border-color: #d4a353;
+  background: rgba(255,200,120,0.15);
+  box-shadow: 0 0 10px rgba(255,200,120,0.5);
+}
+
+.formulario button {
+  width: 100%;
+  background: linear-gradient(to right, #e9bb62, #b9872e);
+  padding: 14px;
+  border-radius: 30px;
+  font-size: 17px;
+  font-weight: bold;
+  color: #4b0a0a;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255,210,140,0.4);
+  transition: .3s ease;
+}
+
+.formulario button:hover {
+  background: linear-gradient(to right, #ffd28d, #c6923a);
+  transform: translateY(-3px);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px 10px;
+  font-size: 0.9rem;
+  color: #888;
+  background: #000;
+}
+
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  header {
+    flex-direction: column;
+    /* Cambiar a columna en pantallas pequeñas */
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  header nav {
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    /* Permitir que los elementos se ajusten */
+  }
+
+  nav a {
+    margin: 5px;
+    /* Mantener margen reducido */
+    font-size: 14px;
+    /* Mantener tamaño de fuente */
+    padding: 6px 10px;
+    /* Ajustar padding para que quepan mejor */
+  }
+
+  .contenido {
+    padding: 20px;
+    /* Ajustar padding en contenido */
+  }
+}
+
+/* ========== RESPONSIVE DESIGN PARA TABLETS Y CELULARES ========== */
+
+@media (max-width: 1024px) {
+  header nav a {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+
+  .botones a {
+    font-size: 14px;
+    padding: 10px 18px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero p {
+    font-size: 16px;
+  }
+
+  .hero {
+    padding: 100px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 15px;
+  }
+
+  header nav {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  header nav a {
+    width: 100%;
+    margin: 5px 0;
+    text-align: left;
+    padding: 10px;
+  }
+
+  .botones {
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+  }
+
+  .botones a {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  .hero video {
+    object-fit: cover;
+    height: 100vh;
+    width: 100%;
+  }
+
+  .hero {
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 24px;
+  }
+
+  .hero p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  header nav a img {
+    width: 18px;
+  }
+
+  .hero h1 {
+    font-size: 20px;
+  }
+
+  .hero p {
+    font-size: 13px;
+  }
+
+  .botones a {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
+}

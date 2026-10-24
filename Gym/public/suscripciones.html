@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mis Suscripciones</title>
+  <link rel="icon" type="images/png" href="Logo/Logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Segoe UI, Tahoma, sans-serif;
+      background: #0a3d3d;
+      color: #ccffe6;
+      padding-top: 100px;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1a1a;
+      padding: 20px 40px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #00ff99;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 2.5em;
+      text-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
+    }
+
+    .suscripciones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      justify-items: center;
+      padding: 20px;
+    }
+
+    /* Tarjeta de suscripción */
+    .card {
+      width: 220px;
+      height: 520px;
+      background-image: linear-gradient(163deg, #00ff75 0%, #3700ff 100%);
+      border-radius: 20px;
+      transition: all 0.3s;
+      padding: 4px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .card2 {
+      width: 100%;
+      height: 100%;
+      background-color: #1a1a1a;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
+
+    .card2:hover {
+      transform: scale(0.98);
+      border-radius: 20px;
+    }
+
+    .card:hover {
+      box-shadow: 0px 0px 30px 1px rgba(0, 255, 117, 0.30);
+    }
+
+    .suscripcion-nombre {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #00ff99;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .suscripcion-precio {
+      font-size: 2em;
+      color: #00ff99;
+      text-align: center;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    .suscripcion-periodo {
+      font-size: 0.9em;
+      color: #ccffe6;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .suscripcion-beneficios {
+      font-size: 0.85em;
+      color: #ccffe6;
+      margin: 15px 0;
+      list-style: none;
+      flex-grow: 1;
+    }
+
+    .suscripcion-beneficios li {
+      padding: 6px 0;
+      border-bottom: 1px solid #003333;
+    }
+
+    .suscripcion-beneficios li:before {
+      content: "✓ ";
+      color: #00ff99;
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .suscripcion-beneficios li:last-child {
+      border-bottom: none;
+    }
+
+    .suscripcion-btn {
+      background: linear-gradient(135deg, #00ff99, #00cc77);
+      color: #000;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 15px;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    .suscripcion-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0px 0px 15px rgba(0, 255, 153, 0.4);
+    }
+
+    .suscripcion-btn:active {
+      transform: scale(0.95);
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #00ff99;
+      font-size: 1.1em;
+      padding: 40px;
+    }
+
+    .volver-btn {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #00ff99;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 1em;
+      transition: all 0.3s ease;
+    }
+
+    .volver-btn:hover {
+      color: #00cc77;
+      text-decoration: underline;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    nav a, nav span {
+      color: #00ff99;
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover, nav span:hover {
+      color: #00cc77;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+        margin-bottom: 20px;
+      }
+
+      .suscripciones-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+      }
+
+      .card, .card2 {
+        width: 100%;
+        max-width: 100%;
+      }
+      .entrenador-box {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+}
+
+select, button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
+}
+
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="color:#00ff99;font-weight:bold;font-size:24px">
+      <a href="index.html" style="color:#00ff99;text-decoration:none;cursor:pointer">Barriga Fit - Suscripciones</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <span class="volver-btn" onclick="window.history.back()">← Volver atrás</span>
+    
+    <h1>Planes de Suscripción</h1>
+    
+    <div class="suscripciones-grid" id="suscripcionesContainer">
+      <!-- Las tarjetas se generarán aquí con JavaScript -->
+    </div>
+  </div>
+
+
+
+  <script src="sesion.js"></script>
+
+  <script>
+    // Definir planes de suscripción
+    const planesDisponibles = [
+      {
+        id: 1,
+        nombre: 'Semanal',
+        precio: 9.99,
+        periodo: 'semana',
+        beneficios: [
+          'Acceso a videos básicos',
+          'Seguimiento de progreso',
+          'Comunidad online'
+        ]
+      },
+      {
+        id: 2,
+        nombre: 'Mensual',
+        precio: 29.99,
+        periodo: 'mes',
+        beneficios: [
+          'Todo del plan Semanal',
+          'Videos exclusivos premium',
+          'Planes de entrenamiento personalizados',
+          'Chat con entrenador',
+          'Análisis de progreso detallado'
+        ]
+      },
+      {
+        id: 3,
+        nombre: 'Anual',
+        precio: 249.99,
+        periodo: 'año',
+        beneficios: [
+          'Todo del plan Mensual',
+          'Ahorro de 3 meses',
+          'Entrenamiento 1-on-1 semanal',
+          'Planes de nutrición personalizado',
+          'Prioridad en soporte',
+          'Acceso ilimitado 24/7'
+        ]
+      }
+    ];
+
+    function cargarSuscripciones() {
+      const container = document.getElementById('suscripcionesContainer');
+      container.innerHTML = '';
+
+      if (planesDisponibles.length === 0) {
+        container.innerHTML = '<div class="empty-message">No hay suscripciones disponibles</div>';
+        return;
+      }
+
+      planesDisponibles.forEach(plan => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = 'card';
+        
+        let beneficiosHTML = '';
+        plan.beneficios.forEach(beneficio => {
+          beneficiosHTML += `<li>${beneficio}</li>`;
+        });
+
+        tarjeta.innerHTML = `
+          <div class="card2">
+            <div>
+              <div class="suscripcion-nombre">${plan.nombre}</div>
+              <div class="suscripcion-precio">S/. ${plan.precio.toFixed(2)}</div>
+              <div class="suscripcion-periodo">por ${plan.periodo}</div>
+              <ul class="suscripcion-beneficios">
+                ${beneficiosHTML}
+              </ul>
+            </div>
+            <button class="suscripcion-btn" onclick="contratarSuscripcion(${plan.id}, '${plan.nombre}', ${plan.precio})">
+              Contratar Ahora
+            </button>
+          </div>
+        `;
+        
+        container.appendChild(tarjeta);
+      });
+    }
+
+    function contratarSuscripcion(planId, nombre, precio) {
+      Swal.fire({
+        icon: 'info',
+        title: `Contratar ${nombre}`,
+        text: `¿Deseas contratar el plan ${nombre} por S/. ${precio.toFixed(2)}?`,
+        background: '#0a3d3d',
+        color: '#00ff99',
+        confirmButtonColor: '#00ff99',
+        cancelButtonColor: '#ff4141',
+        confirmButtonText: 'Sí, contratar',
+        cancelButtonText: 'Cancelar',
+        showCancelButton: true,
+        iconColor: '#00ff99'
+      }).then(result => {
+        if (result.isConfirmed) {
+          procesarSuscripcion(planId, nombre, precio);
+        }
+      });
+      
+    }
+async function procesarSuscripcion(planId, nombre, precio) {
+  try {
+    const resp = await fetch('/api/suscripciones/crear', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId, nombre, precio })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: data.error || 'No se pudo procesar la suscripción'
+      });
+      return;
+    }
+
+    // ✅ Suscripción creada
+    const suscripcionId = data.suscripcionId;
+
+    // 👉 AHORA elegir entrenador
+    const { value: entrenador } = await Swal.fire({
+      title: 'Selecciona tu entrenador',
+      background: '#0a3d3d',
+      color: '#00ff99',
+      input: 'select',
+      inputOptions: {
+        'Carlos Ramírez': 'Carlos Ramírez - Musculación',
+        'María López': 'María López - Cardio Fitness',
+        'José Fernández': 'José Fernández - CrossFit',
+        'Ana Torres': 'Ana Torres - Yoga',
+        'Luis Mendoza': 'Luis Mendoza - Entrenamiento Funcional',
+        'Paola Ruiz': 'Paola Ruiz - Zumba',
+        'Miguel Herrera': 'Miguel Herrera - Levantamiento Olímpico',
+        'Sofía Castro': 'Sofía Castro - Pilates'
+      },
+      inputPlaceholder: 'Selecciona un entrenador',
+      confirmButtonText: 'Asignar',
+      confirmButtonColor: '#00ff99',
+      allowOutsideClick: false
+    });
+
+    if (!entrenador) return;
+
+    // 👉 Guardar entrenador
+    await fetch('/api/suscripciones/asignar-entrenador', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        suscripcionId,
+        entrenador
+      })
+    });
+
+Swal.fire({
+  icon: 'success',
+  title: '¡Todo listo!',
+  text: `Suscripción activada con ${entrenador}`,
+  background: '#0a3d3d',
+  color: '#00ff99',
+  confirmButtonText: 'Ir al inicio',
+  confirmButtonColor: '#00ff99',
+  allowOutsideClick: false
+}).then(() => {
+  window.location.href = 'index.html'; // 🔁 menú inicio
+});
+  } catch (err) {
+    console.error(err);
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Error en la solicitud'
+    });
+  }
+}
+    document.addEventListener('DOMContentLoaded', cargarSuscripciones);
+  </script>
+</body>
+</html>

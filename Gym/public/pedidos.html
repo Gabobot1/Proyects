@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mis Pedidos</title>
+  <link rel="icon" type="images/png" href="Logo/Logo.png">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <style>
+    body{margin:0;font-family:Segoe UI, Tahoma, sans-serif;background:#0a3d3d;color:#ccffe6;padding-top:100px}
+    header{background:#1a1a1a;padding:20px 40px;position:fixed;top:0;left:0;right:0;z-index:1000}
+    .container{max-width:900px;margin:40px auto;padding:20px}
+    .pedido{background:#002f2f;border:1px solid #00ff99;padding:12px;border-radius:8px;margin-bottom:12px}
+    .empty{color:#00ff99;text-align:center;padding:30px}
+    
+    .cantidad-selector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 10px 0;
+      background: linear-gradient(135deg, #00ff99, #00cc77);
+      padding: 10px;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0, 255, 153, 0.3);
+    }
+
+    .cantidad-selector button {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      margin: 0;
+      background-color: #1a1a1a;
+      color: #00ff99;
+      font-weight: bold;
+      border: 2px solid #00ff99;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 18px;
+    }
+
+    .cantidad-selector button:hover {
+      background-color: #00ff99;
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    .cantidad-input {
+      width: 60px;
+      padding: 8px;
+      text-align: center;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #1a1a1a;
+      color: #00ff99;
+      border: 2px solid #00ff99;
+      border-radius: 6px;
+    }
+    
+    .botones-carrito {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .botones-carrito button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+    
+    .btn-quitar {
+      background: #ff4141;
+      color: #fff;
+    }
+    
+    .btn-quitar:hover {
+      background: #ff1111;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background: #002f2f;
+      border: 2px solid #00ff99;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    table thead {
+      background: linear-gradient(135deg, #00ff99, #00cc77);
+      color: #000;
+    }
+    
+    table th {
+      padding: 14px;
+      text-align: left;
+      font-weight: bold;
+      border-bottom: 2px solid #00ff99;
+    }
+    
+    table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #003333;
+      color: #ccffe6;
+    }
+    
+    table tr:hover {
+      background-color: #004040;
+      transition: background-color 0.3s ease;
+    }
+    
+    table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .estado-pedido {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: #00ff99;
+      color: #000;
+    }
+
+    .btn-detalles {
+      background: #00ff99;
+      color: #000;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-detalles:hover {
+      background: #00cc77;
+      transform: scale(1.05);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      background-color: #002f2f;
+      margin: 5% auto;
+      padding: 20px;
+      border: 2px solid #00ff99;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .close-modal {
+      color: #00ff99;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: #ff4141;
+    }
+
+    .detalle-item {
+      background: #003333;
+      padding: 12px;
+      margin: 10px 0;
+      border-left: 4px solid #00ff99;
+      border-radius: 4px;
+    }
+
+    .detalle-item strong {
+      color: #00ff99;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="color:#00ff99;font-weight:bold;font-size:24px"><a href="index.html" style="color:#00ff99;text-decoration:none;cursor:pointer">Barriga Fit - Mis Pedidos</a></div>
+  </header>
+  <div class="container">
+    <h2 style="color:#00ff99">Carrito</h2>
+    <div id="carritoContainer"></div>
+    <div id="carritoEmpty" class="empty" style="display:none">Tu carrito está vacío.</div>
+    <hr style="border-color:#003333;margin:20px 0">
+    <h2 style="color:#00ff99">Tus pedidos</h2>
+  <div id="listaPedidos"></div>
+    <div id="empty" class="empty" style="display:none">No hay pedidos aún.</div>
+  </div>
+
+  <!-- Modal para detalles de pedido -->
+  <div id="modalDetalles" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="cerrarModalDetalles()">&times;</span>
+      <h2 style="color: #00ff99; margin-top: 0;">Detalles del Pedido #<span id="numeroPedido"></span></h2>
+      <div style="background: #003333; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+        <div><strong style="color: #00ff99;">Fecha:</strong> <span id="fechaPedido"></span></div>
+        <div><strong style="color: #00ff99;">Total:</strong> <span id="totalPedido" style="color: #00ff99; font-size: 1.2em;"></span></div>
+      </div>
+      <h3 style="color: #00ff99;">Productos:</h3>
+      <div id="itemsPedido"></div>
+    </div>
+  </div>
+
+  <script src="sesion.js"></script>
+  <script>
+    let carritoGlobal = [];
+
+    async function cargarCarrito(){
+      try{
+        const resp = await fetch('/api/carrito');
+        if (!resp.ok) throw new Error('No se pudo obtener carrito');
+        const data = await resp.json();
+        carritoGlobal = data.carrito || [];
+        const cont = document.getElementById('carritoContainer');
+        cont.innerHTML = '';
+        const carrito = carritoGlobal;
+        if (carrito.length === 0) {
+          document.getElementById('carritoEmpty').style.display = 'block';
+          return;
+        } else {
+          document.getElementById('carritoEmpty').style.display = 'none';
+        }
+
+        let total = 0;
+        carrito.forEach(item => {
+          total += item.precio * item.cantidad;
+          const d = document.createElement('div');
+          d.className = 'pedido';
+          d.setAttribute('data-item-id', item.id);
+          d.innerHTML = `<strong>${item.nombre}</strong>
+            <div>Precio unitario: S/. ${item.precio.toFixed(2)}</div>
+            <div class="cantidad-selector">
+              <button onclick="actualizarCantidad('${item.id}', this, -1)">−</button>
+              <input type="number" class="cantidad-input" value="${item.cantidad}" min="1" max="100" onchange="actualizarCantidadDirecta('${item.id}', this)">
+              <button onclick="actualizarCantidad('${item.id}', this, 1)">+</button>
+            </div>
+            <div>Subtotal: S/. ${(item.precio*item.cantidad).toFixed(2)}</div>
+            <div class="botones-carrito"><button class="btn-quitar" onclick="removeFromCart('${item.id}')">Quitar del carrito</button></div>`;
+          cont.appendChild(d);
+        });
+
+        const resumen = document.createElement('div');
+        resumen.className = 'pedido';
+        resumen.id = 'resumenCarrito';
+        resumen.innerHTML = `<strong id="totalCarrito">Total: S/. ${total.toFixed(2)}</strong><div style="margin-top:10px"><button id="checkoutBtn" style="background:#00ff99;color:#000;border:none;padding:10px;border-radius:6px;cursor:pointer">Realizar pedido</button></div>`;
+        cont.appendChild(resumen);
+
+        document.getElementById('checkoutBtn').addEventListener('click', checkoutCart);
+      }catch(err){
+        console.error(err);
+      }
+    }
+
+    async function removeFromCart(id){
+      try{
+        const resp = await fetch('/api/carrito/remove', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({id})});
+        if(resp.ok){
+          cargarCarrito();
+          Swal.fire({icon:'success',title:'Eliminado',text:'Producto eliminado del carrito',background:'#0a3d3d',color:'#00ff99',confirmButtonColor:'#00ff99'});
+        }
+      }catch(e){console.error(e)}
+    }
+
+    async function actualizarCantidad(id, btn, cambio) {
+      try {
+        const selector = btn.closest('.cantidad-selector');
+        const input = selector.querySelector('.cantidad-input');
+        let nuevaCantidad = parseInt(input.value) || 1;
+        nuevaCantidad += cambio;
+        
+        if (nuevaCantidad < 1) nuevaCantidad = 1;
+        if (nuevaCantidad > 100) nuevaCantidad = 100;
+        
+        input.value = nuevaCantidad;
+        await actualizarItemLocal(id, nuevaCantidad);
+      } catch (err) {
+        console.error('Error:', err);
+      }
+    }
+
+    async function actualizarCantidadDirecta(id, input) {
+      try {
+        let cantidad = parseInt(input.value) || 1;
+        
+        if (cantidad < 1) {
+          cantidad = 1;
+          input.value = 1;
+        }
+        if (cantidad > 100) {
+          cantidad = 100;
+          input.value = 100;
+        }
+        
+        await actualizarItemLocal(id, cantidad);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function actualizarItemLocal(id, cantidad) {
+      // Encontrar item en carrito
+      const item = carritoGlobal.find(i => i.id === id);
+      if (!item) return;
+      
+      const cantidadAnterior = item.cantidad;
+      
+      // ACTUALIZAR INMEDIATAMENTE (optimistic update)
+      item.cantidad = cantidad;
+      
+      // Actualizar subtotal del item
+      const pedidoDiv = document.querySelector(`[data-item-id="${id}"]`);
+      if (pedidoDiv) {
+        const subtotalDiv = Array.from(pedidoDiv.querySelectorAll('div')).find(d => d.textContent.includes('Subtotal:'));
+        if (subtotalDiv) {
+          subtotalDiv.textContent = `Subtotal: S/. ${(item.precio * cantidad).toFixed(2)}`;
+        }
+      }
+      
+      // Actualizar total del carrito
+      let total = 0;
+      carritoGlobal.forEach(i => {
+        total += i.precio * i.cantidad;
+      });
+      
+      const totalCarrito = document.getElementById('totalCarrito');
+      if (totalCarrito) {
+        totalCarrito.textContent = `Total: S/. ${total.toFixed(2)}`;
+      }
+      
+      // AHORA enviar al servidor en background
+      fetch('/api/carrito/update', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id, cantidad})
+      }).catch(err => {
+        console.error('Error actualizando en servidor:', err);
+        // Revertir cambios si falla
+        item.cantidad = cantidadAnterior;
+        const subtotalDiv = Array.from(pedidoDiv.querySelectorAll('div')).find(d => d.textContent.includes('Subtotal:'));
+        if (subtotalDiv) {
+          subtotalDiv.textContent = `Subtotal: S/. ${(item.precio * cantidadAnterior).toFixed(2)}`;
+        }
+        let totalRevertido = 0;
+        carritoGlobal.forEach(i => {
+          totalRevertido += i.precio * i.cantidad;
+        });
+        if (totalCarrito) {
+          totalCarrito.textContent = `Total: S/. ${totalRevertido.toFixed(2)}`;
+        }
+        Swal.fire({icon:'error', title:'Error', text:'No se pudo actualizar la cantidad', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#ff4141'});
+      });
+    }
+
+    function actualizarTotalCarrito(carrito) {
+      let total = 0;
+      carrito.forEach(item => {
+        total += item.precio * item.cantidad;
+      });
+      
+      const totalCarrito = document.getElementById('totalCarrito');
+      if (totalCarrito) {
+        totalCarrito.textContent = `Total: S/. ${total.toFixed(2)}`;
+      }
+    }
+
+    async function checkoutCart(){
+      try{
+        const resp = await fetch('/api/carrito/checkout', {method:'POST'});
+        const data = await resp.json();
+        if(resp.ok){
+          // Limpiar carrito en memoria
+          carritoGlobal = [];
+          
+          Swal.fire({icon:'success',title:'Pedido realizado',text:data.mensaje || 'Recibido',background:'#0a3d3d',color:'#00ff99',confirmButtonColor:'#00ff99'});
+          cargarCarrito();
+          // recargar pedidos historicos
+          cargarPedidos(true);
+        } else {
+          Swal.fire({icon:'error',title:'Error',text:data.error || 'No se pudo realizar el pedido',background:'#0a3d3d',color:'#00ff99',confirmButtonColor:'#ff4141'});
+        }
+      }catch(e){console.error(e)}
+    }
+
+    async function cargarPedidos(){
+      try{
+        const resp = await fetch('/api/pedidos');
+        if (!resp.ok){
+          const txt = await resp.text();
+          throw new Error(txt || 'Error al obtener pedidos');
+        }
+        const data = await resp.json();
+        const lista = document.getElementById('listaPedidos');
+        lista.innerHTML = '';
+        
+        if (!data.pedidos || data.pedidos.length === 0){
+          document.getElementById('empty').style.display = 'block';
+          return;
+        } else {
+          document.getElementById('empty').style.display = 'none';
+        }
+        
+        let tabla = '<table>';
+        tabla += '<thead>';
+        tabla += '<tr>';
+        tabla += '<th>ID Pedido</th>';
+        tabla += '<th>Fecha</th>';
+        tabla += '<th>Total</th>';
+        tabla += '<th>Estado</th>';
+        tabla += '<th>Acciones</th>';
+        tabla += '</tr>';
+        tabla += '</thead>';
+        tabla += '<tbody>';
+        
+        data.pedidos.forEach(p => {
+          const fecha = p.Fecha ? new Date(p.Fecha).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }) : 'Sin fecha';
+          const total = (p.Total || 0).toFixed(2);
+          const pedidoId = p.ID_pedido || p.id;
+          tabla += '<tr>';
+          tabla += '<td><strong>#' + pedidoId + '</strong></td>';
+          tabla += '<td>' + fecha + '</td>';
+          tabla += '<td>S/. ' + total + '</td>';
+          tabla += '<td><span class="estado-pedido">Completado</span></td>';
+          tabla += '<td><button class="btn-detalles" onclick="verDetallesPedido(' + pedidoId + ')">Ver detalles</button></td>';
+          tabla += '</tr>';
+        });
+        
+        tabla += '</tbody>';
+        tabla += '</table>';
+        
+        lista.innerHTML = tabla;
+      }catch(err){
+        console.error(err);
+        Swal.fire({icon:'error',title:'Error',text:'No se pudieron cargar los pedidos',background:'#0a3d3d',color:'#00ff99',confirmButtonColor:'#ff4141'});
+      }
+    }
+
+    async function verDetallesPedido(pedidoId) {
+      try {
+        const resp = await fetch(`/api/pedidos/${pedidoId}`);
+        if (!resp.ok) throw new Error('No se pudo obtener detalles del pedido');
+        const data = await resp.json();
+
+        if (data.success && data.pedido) {
+          const pedido = data.pedido;
+          document.getElementById('numeroPedido').textContent = pedido.id;
+          
+          const fecha = new Date(pedido.fecha).toLocaleDateString('es-ES', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+          });
+          document.getElementById('fechaPedido').textContent = fecha;
+          document.getElementById('totalPedido').textContent = 'S/. ' + pedido.total.toFixed(2);
+
+          let itemsHTML = '';
+          if (pedido.items && pedido.items.length > 0) {
+            pedido.items.forEach(item => {
+              const subtotal = (item.Cantidad * item.Precio).toFixed(2);
+              itemsHTML += `
+                <div class="detalle-item">
+                  <div><strong>${item.Producto}</strong></div>
+                  <div>Cantidad: ${item.Cantidad}</div>
+                  <div>Precio unitario: S/. ${item.Precio.toFixed(2)}</div>
+                  <div style="color: #00ff99; margin-top: 8px;"><strong>Subtotal: S/. ${subtotal}</strong></div>
+                </div>
+              `;
+            });
+          } else {
+            itemsHTML = '<div class="detalle-item">No hay items en este pedido</div>';
+          }
+
+          document.getElementById('itemsPedido').innerHTML = itemsHTML;
+          document.getElementById('modalDetalles').style.display = 'block';
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudieron cargar los detalles del pedido',
+          background: '#0a3d3d',
+          color: '#00ff99',
+          confirmButtonColor: '#ff4141'
+        });
+      }
+    }
+
+    function cerrarModalDetalles() {
+      document.getElementById('modalDetalles').style.display = 'none';
+    }
+
+    // Cerrar modal al hacer clic fuera de él
+    window.onclick = function(event) {
+      const modal = document.getElementById('modalDetalles');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    cargarCarrito();
+    cargarPedidos();
+  </script>
+</body>
+</html>

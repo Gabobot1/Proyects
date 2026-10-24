@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio de Sesión</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="CSS/logincss.css">
+
+
+</head>
+
+<body>
+    <div class="formulario">
+        <h2>Iniciar Sesión</h2>
+        <form id="loginForm">
+            <label for="loginUsername">Usuario:</label>
+            <input type="text" id="loginUsername" required>
+            <label for="loginPassword">Contraseña:</label>
+            <div class="password-wrapper">
+                <input type="password" id="loginPassword" required>
+                <img src="Imagenes/eye-password-hide.png" class="toggle-pass" id="togglePass1">
+                <div class="password-beam" id="passwordBeam1"></div>
+            </div>
+            <button type="submit">Ingresar</button>
+            <p><a href="recuperar.html">¿Olvidaste tu contraseña?</a></p>
+            <p>¿No tienes cuenta? <a href="index.html">Registrarse</a></p>
+            <p>Continuar sin una cuenta <a href="Menu.html">ir al inicio</a></p>
+        </form>
+    </div>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const identificador = loginUsername.value;
+            const Contraseña = loginPassword.value;
+            if (
+                (identificador === "admin" && Contraseña === "1234") ||
+                (identificador === "admin1" && Contraseña === "1234") ||
+                (identificador === "admin2" && Contraseña === "1234")
+            ) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Bienvenido Administrador",
+                    text: "Acceso correcto",
+                    confirmButtonColor: "#00796b"
+                }).then(() => {
+                    localStorage.setItem("usuarioLogueado", "admin");
+                    window.location.href = "admin.html";
+                });
+                return;
+            }
+            try {
+                const response = await fetch("/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ identificador, Contraseña })
+                });
+
+                const data = await response.json();
+
+                if (!data.success) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: data.message,
+                        confirmButtonColor: "#00796b"
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Bienvenido",
+                    text: data.nombre,
+                    confirmButtonColor: "#00796b"
+                }).then(() => {
+                    localStorage.setItem("idUsuario", data.idUsuario);
+                    localStorage.setItem("nombreUsuario", data.nombre);
+                    localStorage.setItem("correoUsuario", data.correo);
+                    localStorage.setItem("usuarioLogueado", data.correo);
+                    window.location.href = "Menu.html";
+                });
+
+            } catch (err) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error del servidor",
+                    text: "No se pudo conectar con el backend",
+                    confirmButtonColor: "#00796b"
+                });
+            }
+        });
+    </script>
+    <script>
+        function setupBeamLogic(inputId, toggleId, beamId) {
+            const input = document.getElementById(inputId);
+            const toggle = document.getElementById(toggleId);
+            const beam = document.getElementById(beamId);
+
+            let beamActive = false;
+
+            toggle.addEventListener("click", () => {
+                const wasPass = input.type === "password";
+                input.type = wasPass ? "text" : "password";
+
+                beamActive = wasPass;
+                beam.classList.toggle("active", wasPass);
+                input.classList.toggle("showing-pass", input.type === "text");
+                toggle.src = input.type === "text"
+                    ? "Imagenes/ojo mostrar.png"
+                    : "Imagenes/eye-password-hide.png";
+            });
+            input.addEventListener("mousemove", (e) => {
+                if (!beamActive) return;
+                const rect = input.getBoundingClientRect();
+                const y = e.clientY - rect.top;
+                const percent = y / rect.height;
+                const offset = (percent - 0.5) * 14;
+                beam.style.transform = `translateY(calc(-50% + ${offset}px))`;
+            });
+
+            input.addEventListener("mouseleave", () => {
+                beam.style.transform = "translateY(-50%)";
+            });
+        }
+
+        setupBeamLogic("loginPassword", "togglePass1", "passwordBeam1");
+    </script>
+    <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.0/build/spline-viewer.js"></script>
+    <spline-viewer url="https://prod.spline.design/W9xnoFub6A34yitx/scene.splinecode"></spline-viewer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

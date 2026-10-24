@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Usuario</title>
+  <link rel="stylesheet" href="CSS/registrocss.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="alertGlassContainer"></div>
+  <div class="formulario">
+    <h2>Registrarse</h2>
+    <div class="face-github">
+      <div class="eyes">
+        <div class="eye eye-left"></div>
+        <div class="eye eye-right"></div>
+      </div>
+      <div class="mouth"></div>
+    </div>
+    <div id="face-dialog"></div>
+    <div id="alertContainer" class="container mt-3"></div>
+    <form id="registrationForm">
+      <label for="regUsername">Nombre:</label>
+      <input type="text" id="regUsername" required>
+
+      <label for="regApellidopaterno">Apellido Paterno:</label>
+      <input type="text" id="regApellidopaterno" required>
+
+      <label for="regApellidomaterno">Apellido Materno:</label>
+      <input type="text" id="regApellidomaterno" required>
+
+      <label for="regEmail">Correo electrónico:</label>
+      <input type="email" id="regEmail" required>
+      <label for="regPassword">Contraseña:</label>
+      <div class="password-wrapper">
+        <input type="password" id="regPassword" required>
+
+        <img src="Imagenes/eye-password-hide.png" class="toggle-pass" id="togglePass1">
+
+        <div class="password-beam" id="passwordBeam1"></div>
+      </div>
+
+      <label for="regConfirmPassword">Confirmar Contraseña:</label>
+      <div class="password-wrapper">
+        <input type="password" id="regConfirmPassword" required>
+
+        <img src="Imagenes/eye-password-hide.png" class="toggle-pass" id="togglePass2">
+
+        <div class="password-beam" id="passwordBeam2"></div>
+      </div>
+      <div id="beamOverlay"></div>
+      <button type="submit">Registrarse</button>
+      <p>¿Ya tienes cuenta? <a href="LOGIN.html">Iniciar sesión</a></p>
+    </form>
+  </div>
+<script>
+document.getElementById("registrationForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const Nombre = document.getElementById("regUsername").value.trim();
+    const appate = document.getElementById("regApellidopaterno").value.trim();
+    const apmate = document.getElementById("regApellidomaterno").value.trim();
+    const Correo = document.getElementById("regEmail").value.trim();
+    const Contraseña = document.getElementById("regPassword").value;
+    const confirmPassword = document.getElementById("regConfirmPassword").value;
+
+    if (!Nombre || !appate || !apmate || !Correo || !Contraseña) {
+        alert("Por favor completa todos los campos.");
+        return;
+    }
+
+    if (Contraseña !== confirmPassword) {
+        alert("Las contraseñas no coinciden.");
+        return;
+    }
+
+    try {
+        const response = await fetch("/registrar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ Nombre, appate, apmate, Correo, Contraseña })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            // 🔥 GUARDAR CORREO PARA VERIFICAR
+            localStorage.setItem("correoPendienteVerificacion", Correo);
+
+            // 🔥 IR A PÁGINA DE VERIFICACIÓN
+            window.location.href = "verificar.html";
+        } 
+        else {
+            showGlassAlert(result.message || "Error desconocido", "error");
+        }
+
+    } catch (err) {
+        console.error("Error en el registro:", err);
+        alert("Error de conexión con el servidor.");
+    }
+});
+</script>
+
+
+  <script>
+    function showGlassAlert(message, type = "success") {
+      const container = document.getElementById("alertGlassContainer");
+
+      const alert = document.createElement("div");
+      alert.className = `glass-alert ${type}`;
+
+      alert.innerHTML = `
+    <span class="icon">${type === "success" ? "✔️" : "⚠️"}</span>
+    <span>${message}</span>
+    <button onclick="this.parentElement.remove()">✖</button>
+  `;
+
+      container.appendChild(alert);
+
+      setTimeout(() => alert.classList.add("show"), 10);
+
+      setTimeout(() => {
+        alert.classList.remove("show");
+        setTimeout(() => alert.remove(), 1000);
+      }, 2800);
+    }
+  </script>
+
+  <script>
+    const face = document.querySelector(".face-github");
+    const eyes = document.querySelectorAll(".eye");
+    const username = document.getElementById("regUsername");
+    const paterno = document.getElementById("regApellidopaterno");
+    const materno = document.getElementById("regApellidomaterno");
+    const email = document.getElementById("regEmail");
+    const pass = document.getElementById("regPassword");
+    const pass2 = document.getElementById("regConfirmPassword");
+
+    const camposUsuario = [username, paterno, materno, email].filter(Boolean);
+    const camposPassword = [pass, pass2].filter(Boolean);
+
+    let inactivityTimer = null;
+    let passwordMode = false;
+
+    /* ============ EXPRESIONES ============ */
+    const EXPRESSIONS = [
+      "happy", "nervous", "sleepy", "suspicious",
+      "laugh", "shy", "sad", "dizzy"
+    ];
+
+    function setFace(expr) {
+      EXPRESSIONS.forEach(c => face.classList.remove(c));
+      if (expr) {
+        face.classList.add(expr);
+        face.dataset.expr = expr;
+      } else {
+        face.dataset.expr = "";
+      }
+    }
+
+    /* ============ BURBUJA DE DIÁLOGO ============ */
+    function faceSpeak(text, duration = 100) {
+      const dialog = document.getElementById("face-dialog");
+      if (!dialog) return;
+
+      dialog.textContent = text;
+      dialog.classList.add("show");
+
+      clearTimeout(dialog.hideTimeout);
+      dialog.hideTimeout = setTimeout(() => {
+        dialog.classList.remove("show");
+      }, duration);
+    }
+
+    /* ============ PARPADEO BONITO (normal + doble) ============ */
+    function scheduleBlink() {
+      const delay = 2500 + Math.random() * 3000;
+
+      setTimeout(() => {
+        if (passwordMode || face.classList.contains("sleepy") || face.classList.contains("dizzy")) {
+          return scheduleBlink();
+        }
+
+        const doDouble = Math.random() < 0.25;
+
+        if (doDouble) {
+          face.classList.add("double-blink");
+          setTimeout(() => {
+            face.classList.remove("double-blink");
+          }, 350);
+        } else {
+          face.classList.add("blinking");
+          setTimeout(() => {
+            face.classList.remove("blinking");
+          }, 220);
+        }
+
+        scheduleBlink();
+      }, delay);
+    }
+    scheduleBlink();
+
+    /* ============ OJOS SIGUEN EL CURSOR ============ */
+    document.addEventListener("mousemove", e => {
+      if (
+        passwordMode ||
+        face.classList.contains("sleepy") ||
+        face.classList.contains("dizzy")
+      ) return;
+
+      const x = (e.clientX / window.innerWidth - 0.5) * 10;
+      const y = (e.clientY / window.innerHeight - 0.5) * 10;
+
+      eyes.forEach(eye => {
+        eye.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
+
+    /* ============ MAREO POR MOVIMIENTO MUY RÁPIDO ============ */
+    let lastX = null;
+    let lastY = null;
+    let lastTime = null;
+
+    function activateDizzy() {
+      if (face.classList.contains("dizzy") || face.classList.contains("sleepy")) return;
+
+      const prevExpr = face.dataset.expr || "";
+
+      setFace("dizzy");
+      faceSpeak("No que me mareo", 5000);
+      setTimeout(() => {
+        if (prevExpr && !passwordMode) {
+          setFace(prevExpr);
+        } else if (!passwordMode) {
+          setFace("");
+        }
+      }, 900);
+    }
+
+    document.addEventListener("mousemove", e => {
+      const now = Date.now();
+
+      if (lastX === null) {
+        lastX = e.clientX;
+        lastY = e.clientY;
+        lastTime = now;
+        return;
+      }
+
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      const dt = now - lastTime || 1;
+
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const speed = dist / dt;
+      const SPEED_THRESHOLD = 40;
+
+      if (speed > SPEED_THRESHOLD && !passwordMode) {
+        activateDizzy();
+      }
+
+      lastX = e.clientX;
+      lastY = e.clientY;
+      lastTime = now;
+    });
+
+    /* ============ CAMPOS NORMALES: FELIZ ============ */
+    camposUsuario.forEach(campo => {
+      campo.addEventListener("focus", () => {
+        if (!passwordMode && !face.classList.contains("sleepy")) {
+          setFace("happy");
+        }
+      });
+
+      campo.addEventListener("blur", () => {
+        if (!passwordMode && !face.classList.contains("sleepy")) {
+          setFace("");
+        }
+      });
+    });
+
+    /* ============ EMAIL SOSPECHOSO ============ */
+    email.addEventListener("input", () => {
+      const value = email.value;
+      const valido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+      if (!valido && value.length > 3) {
+        if (!passwordMode && !face.classList.contains("sleepy")) {
+          setFace("suspicious");
+          faceSpeak("Ese correo se ve raro 🤨");
+        }
+      } else if (!passwordMode && !face.classList.contains("sleepy")) {
+        setFace("happy");
+      }
+    });
+
+    /* ============ CONTRASEÑA: OJOS CERRADOS ============ */
+    camposPassword.forEach(campo => {
+      campo.addEventListener("focus", () => {
+        passwordMode = true;
+        setFace("nervous");
+        face.classList.add("cover-eyes");
+        faceSpeak("No miro... lo prometo 😳🙈");
+        eyes.forEach(eye => {
+          eye.style.transform = "translate(0,0)";
+        });
+      });
+
+      campo.addEventListener("blur", () => {
+        passwordMode = false;
+        face.classList.remove("cover-eyes");
+        if (!face.classList.contains("sleepy")) {
+          setFace("");
+        }
+      });
+    });
+
+    /* ============ CONTRASEÑA MUY CORTA ============ */
+    if (pass) {
+      pass.addEventListener("input", () => {
+        if (passwordMode && pass.value.length > 0 && pass.value.length < 5) {
+          setFace("sad");
+          faceSpeak("Se que puedes hacerla mas segura");
+        } else if (passwordMode) {
+          setFace("nervous");
+        }
+      });
+    }
+
+    function resetInactivity() {
+      if (passwordMode) return;
+
+      clearTimeout(inactivityTimer);
+      if (face.classList.contains("sleepy")) {
+        setFace("");
+        faceSpeak("¡Ah! Me despertaste 😳", 2000);
+        eyes.forEach(eye => {
+          eye.style.transform = "translate(0,0)";
+        });
+      }
+
+      inactivityTimer = setTimeout(() => {
+        if (!passwordMode) {
+          setFace("sleepy");
+          faceSpeak("Tengo sueñito... 😴", 6600);
+          eyes.forEach(eye => {
+            eye.style.transform = "translate(0,0)";
+          });
+        }
+      }, 6000);
+    }
+
+    document.addEventListener("mousemove", resetInactivity);
+    document.addEventListener("keydown", resetInactivity);
+    resetInactivity();
+  </script>
+  <script>
+    function setupBeamLogic(inputId, toggleId, beamId) {
+
+      const input = document.getElementById(inputId);
+      const toggle = document.getElementById(toggleId);
+      const beam = document.getElementById(beamId);
+
+      let beamActive = false;
+
+      toggle.addEventListener("click", () => {
+
+        const isPass = input.type === "password";
+        input.type = isPass ? "text" : "password";
+        beamActive = isPass;
+        beam.classList.toggle("active", isPass);
+        input.classList.toggle("showing-pass", isPass);
+        toggle.src = isPass
+          ? "Imagenes/ojo mostrar.png"
+          : "Imagenes/eye-password-hide.png";
+      });
+
+      input.addEventListener("mousemove", e => {
+        if (!beamActive) return;
+
+        const rect = input.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const percent = y / rect.height;
+        const offset = (percent - 0.5) * 14;
+
+        beam.style.transform = `translateY(calc(-50% + ${offset}px))`;
+      });
+
+      input.addEventListener("mouseleave", () => {
+        beam.style.transform = "translateY(-50%)";
+      });
+    }
+    setupBeamLogic("regPassword", "togglePass1", "passwordBeam1");
+    setupBeamLogic("regConfirmPassword", "togglePass2", "passwordBeam2");
+  </script>
+  <script>
+    function faceSpeak(text, duration = 1800) {
+      const dialog = document.getElementById("face-dialog");
+      dialog.textContent = text;
+      dialog.classList.add("show");
+
+      clearTimeout(dialog.hideTimeout);
+      dialog.hideTimeout = setTimeout(() => {
+        dialog.classList.remove("show");
+      }, duration);
+    }
+  </script>
+</body>
+
+</html>

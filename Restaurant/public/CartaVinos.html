@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta de Vinos</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="CSS/CartaStyle.css" />
+</head>
+
+<body>
+
+  <header>
+    <div>
+      <img src="Imagenes/logo.png" alt="Logo Madurada" height="40">
+    </div>
+    <nav>
+      <a href="LOGIN.html">Iniciar Sesión</a>
+      <a href="Menu.html">Nuestro Restaurante</a>
+      <a href="Carta.html">Carta</a>
+      <a href="CarneAsada.html">Carnes</a>
+      <a href="CervezadeBodega.html">Cerveza de bodega</a>
+      <a href="Contacto.html">Contacto</a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/instagram.png" alt="Instagram" width="20"></a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/facebook.png" alt="Facebook" width="20"></a>
+      <a href="carrito.html">
+        <img src="Imagenes/carrito.png" alt="Carrito" width="25" title="Ver carrito">
+      </a>
+      <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h2>Carta de Vinos</h2>
+    <p class="intro">Descubre nuestra selección de vinos finos para acompañar tus comidas</p>
+    <section class="grid-menu">
+      <div id="productos-container">
+        <!-- Los productos se cargarán aquí dinámicamente desde la API -->
+      </div>
+      <div class="card">
+        <img src="Imagenes/vino cabernet.jpeg" alt="Cabernet Sauvignon">
+        <div class="card-info">
+          <h3>Cabernet Sauvignon</h3>
+          <p>Vino tinto intenso, con notas a frutos rojos y especias. Ideal para carnes rojas.</p>
+          <span>S/ 75.00</span>
+          <button onclick="agregarAlCarrito(14,'Cabernet Sauvignon', 75.00)">Añadir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/malbec.jpeg" alt="Malbec Reserva">
+        <div class="card-info">
+          <h3>Malbec Reserva</h3>
+          <p>Cuerpo medio-alto, sabores a ciruela, roble y chocolate. Origen argentino.</p>
+          <span>S/ 85.00</span>
+          <button onclick="agregarAlCarrito(15,'Malbec Reserva', 85.00)">Añadir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/Sauvignon Blanc.jpeg" alt="Sauvignon Blanc">
+        <div class="card-info">
+          <h3>Sauvignon Blanc</h3>
+          <p>Vino blanco seco, fresco y afrutado. Perfecto para mariscos.</p>
+          <span>S/ 65.00</span>
+          <button onclick="agregarAlCarrito(16,'Sauvignon Blanc', 65.00)">Añadir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/Chardonnay.jpeg" alt="Chardonnay">
+        <div class="card-info">
+          <h3>Chardonnay</h3>
+          <p>Sabor suave con notas de mantequilla y vainilla. Ideal con aves o pastas.</p>
+          <span>S/ 72.00</span>
+          <button onclick="agregarAlCarrito(17,'Chardonnay', 72.00)">Añadir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/Rosé Andino.jpeg" alt="Rosé Andino">
+        <div class="card-info">
+          <h3>Rosé Andino</h3>
+          <p>Rosado elegante con aromas florales. Ideal como aperitivo.</p>
+          <span>S/ 70.00</span>
+          <button onclick="agregarAlCarrito(18,'Rosé Andino', 70.00)">Añadir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/Espumante Brut.jpeg" alt="Espumante Brut">
+        <div class="card-info">
+          <h3>Espumante Brut</h3>
+          <p>Burbujeante y seco, perfecto para celebraciones o postres.</p>
+          <span>S/ 90.00</span>
+          <button onclick="agregarAlCarrito(19,'Espumante Brut', 90.00)">Añadir</button>
+        </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 Restaurante | Carta digital con carrito
+  </footer>
+
+  <script>
+    // Función para cargar productos dinámicamente desde la API
+    async function cargarProductos() {
+      try {
+        const response = await fetch('/productos/categoria/bebidas'); // Filtra por categoría "bebidas" (como en admin.html)
+        if (!response.ok) throw new Error('Error al cargar productos');
+        const productos = await response.json();
+        const container = document.getElementById('productos-container');
+        container.innerHTML = ''; // Limpia el contenedor antes de agregar
+        productos.forEach(producto => {
+          container.innerHTML += `
+            <div class="card">
+              <img src="${producto.Imagen || 'Imagenes/default.jpg'}" alt="${producto.Nombre}">
+              <div class="card-info">
+                <h3>${producto.Nombre}</h3>
+                <p>${producto.Descripcion}</p>
+                <span>S/ ${producto.Precio}</span>
+                <button onclick="agregarAlCarrito(${producto.ID_producto_pedido},'${producto.Nombre}', ${producto.Precio})">Pedir</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (error) {
+        console.error('Error cargando productos:', error);
+        document.getElementById('productos-container').innerHTML = '<p>Error al cargar productos. Intenta recargar la página.</p>';
+      }
+    }
+
+    // Función para agregar al carrito (igual que antes)
+    function agregarAlCarrito(id,nombre, precio) {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.push({
+        id: id,             
+        nombre: nombre,
+        precio: precio,
+        cantidad: 1
+      });
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      Swal.fire({
+    title: "¡Producto agregado!",
+    text: `${nombre} fue añadido al carrito`,
+    icon: "success",
+    background: "linear-gradient(135deg, #2b0000, #180000)",
+    color: "#ffe6c7",
+    iconColor: "#ffcc66",
+    padding: "20px",
+    showConfirmButton: true,
+    confirmButtonText: "Aceptar",
+    confirmButtonColor: "#d4a84f",
+    customClass: {
+        popup: "swal-cart-popup",
+        confirmButton: "swal-cart-btn"
+    }
+});
+    }
+
+
+    // Función para cerrar sesión
+    function cerrarSesion() {
+      localStorage.removeItem("usuarioLogueado");
+      window.location.href = "LOGIN.html";
+    }
+
+    // Evento DOMContentLoaded para cargar productos y ocultar link de login si está logueado
+    window.addEventListener('DOMContentLoaded', () => {
+      cargarProductos(); // Carga productos dinámicamente
+      const loginLink = document.querySelector('a[href="LOGIN.html"]');
+      if (usuario && loginLink) {
+        loginLink.style.display = 'none';
+      }
+    });
+
+    // Lógica de reserva (mantén igual, aunque en CartaVinos.html no hay btnReserva; por consistencia)
+    document.addEventListener("DOMContentLoaded", () => {
+      const btnReserva = document.getElementById("reservar");
+      if (btnReserva) {
+        btnReserva.addEventListener("click", async () => {
+          try {
+            const response = await fetch("http://localhost:3000/crear-pedido", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ usuario, carrito: JSON.parse(localStorage.getItem('carrito')) || [] })
+            });
+            const data = await response.json();
+            if (data.ok || data.mensaje) {
+              alert("Reserva guardada en la base de datos ✔");
+              localStorage.removeItem("carrito");
+            } else {
+              alert("Error al guardar la reserva");
+            }
+          } catch (err) {
+            console.error("Error al conectar al servidor:", err);
+            alert("No se pudo conectar con el servidor");
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+
+</html>

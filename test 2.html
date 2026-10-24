@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdiraNet | Futuro Conectado</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        /* ================= VARIABLES FUTURISTAS ================= */
+        :root {
+            --bg-dark: #0b0e14;       /* Fondo casi negro */
+            --bg-card: #151921;       /* Fondo de tarjetas */
+            --neon-blue: #00f3ff;     /* Cian Eléctrico (Color Principal) */
+            --neon-purple: #bc13fe;   /* Acento secundario */
+            --text-main: #ffffff;
+            --text-muted: #a0aab5;
+            
+            /* Variables para el BOTÓN ANIMADO (Adaptadas al neón) */
+            --line_color: var(--neon-blue);
+            --back_color: rgba(0, 243, 255, 0.2); /* Relleno semitransparente cian */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+        /* --- Estilos Generales para el Grid (si no los tienes aún) --- */
+.menu-grid {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 2rem;
+  background-color: #0a0a0a; /* Fondo oscuro necesario para el neón */
+}
+
+/* --- 1. El Contenedor (El marco de luz) --- */
+.card {
+  position: relative;
+  width: 300px;        /* O el ancho que prefieras */
+  border-radius: 16px; /* Curvatura del borde */
+  overflow: hidden;    /* Mantiene la luz dentro de la forma */
+  z-index: 1;          /* Necesario para el apilamiento */
+  padding: 2px;        /* IMPORTANTE: Este es el grosor de tu borde neón */
+  transition: transform 0.3s ease;
+}
+
+/* --- 2. La Animación Giratoria (Pseudo-elemento) --- */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: -1; /* Se va detrás del contenido */
+  
+  /* Gradiente cónico: Transparente -> Color Neón */
+  background: conic-gradient(
+    transparent, 
+    transparent, 
+    transparent, 
+    #ffb703 /* <--- CAMBIA ESTE COLOR (Dorado Café) */
+  );
+  
+  animation: rotar-borde 4s linear infinite;
+}
+
+/* Pseudo-elemento extra para el brillo (Glow) al hacer Hover */
+.card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+  background: conic-gradient(
+    transparent, 
+    transparent, 
+    transparent, 
+    #ffb703
+  );
+  animation: rotar-borde 4s linear infinite;
+  filter: blur(20px); /* Difumina la luz */
+  opacity: 0;         /* Oculto por defecto */
+  transition: opacity 0.3s ease;
+}
+
+/* --- 3. El Interior (Tapa oscura) --- */
+.card-inner {
+  background: #141414; /* Fondo oscuro de la tarjeta */
+  border-radius: 14px; /* Ligeramente menor que el padre */
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;    /* Para que la imagen no se salga */
+  color: white;
+}
+
+/* --- 4. Interacciones Elegantes --- */
+.card:hover {
+  transform: translateY(-5px); /* Se levanta sutilmente */
+}
+
+.card:hover::after {
+  opacity: 0.6; /* Enciende el brillo exterior al pasar el mouse */
+}
+
+/* Definición de la animación */
+@keyframes rotar-borde {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Estilos extra para que tu contenido se vea bien --- */
+.card-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.card-content h3 { margin: 0 0 10px; color: #ffb703; }
+.card-content p { color: #ccc; font-size: 0.9rem; margin-bottom: 15px; }
+.card-content .price { font-weight: bold; font-size: 1.2rem; display: block; }
+
+        h1, h2, h3 { font-family: 'Orbitron', sans-serif; letter-spacing: 2px; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* ================= ESTILO NEOMORFISMO DARK (Cyberpunk) ================= */
+        .neu-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            /* Sombra suave oscura para efecto de profundidad */
+            box-shadow: 10px 10px 20px #06080b, -10px -10px 20px #242a37;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .neu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 15px var(--neon-blue); /* Resplandor al hacer hover */
+            border-color: var(--neon-blue);
+        }
+
+        /* ================= NAV ================= */
+        nav {
+            padding: 25px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        /* ================= HERO SECTION ================= */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            /* Fondo con gradiente sutil */
+            background: radial-gradient(circle at center, #1b2838 0%, var(--bg-dark) 70%);
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #fff, var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-content h2 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-muted);
+            font-weight: 300;
+            margin-bottom: 50px;
+        }
+
+        /* ================= BOTÓN ANIMADO (TU CÓDIGO INTEGRADO) ================= */
+        .btn-draw {
+            position: relative;
+            z-index: 0;
+            width: 300px; /* Ancho fijo para el Hero, o 100% en forms */
+            margin: 0 auto;
+            height: 56px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--line_color);
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: block;
+            overflow: hidden; /* IMPORTANTE: Para que la pintura no se salga */
+            border-radius: 4px;
+        }
+
+        .button__text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Líneas del borde inicial */
+        .btn-draw::before, .btn-draw::after,
+        .button__text::before, .button__text::after {
+            content: "";
+            position: absolute;
+            height: 2px; /* Más fino para tech */
+            border-radius: 2px;
+            background: var(--line_color);
+            transition: all 0.5s ease;
+            box-shadow: 0 0 5px var(--neon-blue); /* Glow neon */
+        }
+
+        .btn-draw::before { top: 0; left: 54px; width: calc(100% - 56px * 2 - 16px); }
+        .btn-draw::after { top: 0; right: 54px; width: 8px; }
+        .button__text::before { bottom: 0; right: 54px; width: calc(100% - 56px * 2 - 16px); }
+        .button__text::after { bottom: 0; left: 54px; width: 8px; }
+
+        .button__line { position: absolute; top: 0; width: 56px; height: 100%; overflow: hidden; }
+        .button__line::before {
+            content: ""; position: absolute; top: 0; width: 150%; height: 100%;
+            box-sizing: border-box; border-radius: 300px;
+            border: solid 2px var(--line_color);
+            box-shadow: 0 0 5px var(--neon-blue);
+        }
+        .button__line:nth-child(1), .button__line:nth-child(1)::before { left: 0; }
+        .button__line:nth-child(2), .button__line:nth-child(2)::before { right: 0; }
+
+        /* Hover Interaction */
+        .btn-draw:hover { letter-spacing: 6px; color: #fff; text-shadow: 0 0 10px var(--neon-blue); }
+        .btn-draw:hover::before, .btn-draw:hover .button__text::before { width: 8px; }
+        .btn-draw:hover::after, .btn-draw:hover .button__text::after { width: calc(100% - 56px * 2 - 16px); }
+
+        /* ANIMACIÓN DE PINTURA (DRAWS) */
+        .button__drow1, .button__drow2 {
+            position: absolute; z-index: -1; border-radius: 16px; transform-origin: 16px 16px;
+            background: var(--back_color);
+        }
+        .button__drow1 { top: -16px; left: 40px; width: 32px; height: 0; transform: rotate(30deg); }
+        .button__drow2 { top: 44px; left: 77px; width: 32px; height: 0; transform: rotate(-127deg); }
+        
+        .button__drow1::before, .button__drow1::after, .button__drow2::before, .button__drow2::after {
+            content: ""; position: absolute; background: var(--back_color);
+        }
+        
+        .button__drow1::before { bottom: 0; left: 0; width: 0; height: 32px; border-radius: 16px; transform-origin: 16px 16px; transform: rotate(-60deg); }
+        .button__drow1::after { top: -10px; left: 45px; width: 0; height: 32px; border-radius: 16px; transform-origin: 16px 16px; transform: rotate(69deg); }
+        .button__drow2::before { bottom: 0; left: 0; width: 0; height: 32px; border-radius: 16px; transform-origin: 16px 16px; transform: rotate(-146deg); }
+        .button__drow2::after { bottom: 26px; left: -40px; width: 0; height: 32px; border-radius: 16px; transform-origin: 16px 16px; transform: rotate(-262deg); }
+
+        /* Activación de Animación */
+        .btn-draw:hover .button__drow1 { animation: drow1 ease-in 0.06s forwards; }
+        .btn-draw:hover .button__drow1::before { animation: drow2 linear 0.08s 0.06s forwards; }
+        .btn-draw:hover .button__drow1::after { animation: drow3 linear 0.03s 0.14s forwards; }
+        .btn-draw:hover .button__drow2 { animation: drow4 linear 0.06s 0.2s forwards; }
+        .btn-draw:hover .button__drow2::before { animation: drow3 linear 0.03s 0.26s forwards; }
+        .btn-draw:hover .button__drow2::after { animation: drow5 linear 0.06s 0.32s forwards; }
+
+        /* KEYFRAMES LARGOS (Pixel Based) */
+        @keyframes drow1 { 0% { height: 0; } 100% { height: 250px; } }
+        @keyframes drow2 { 0% { width: 0; opacity: 0; } 10% { opacity: 0; } 11% { opacity: 1; } 100% { width: 800px; } }
+        @keyframes drow3 { 0% { width: 0; } 100% { width: 500px; } }
+        @keyframes drow4 { 0% { height: 0; } 100% { height: 250px; } }
+        @keyframes drow5 { 0% { width: 0; } 100% { width: 850px; } }
+
+        /* ================= CARDS SECTION ================= */
+        .features { padding: 100px 0; }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        .feature-card { padding: 40px; text-align: center; }
+        .icon-box {
+            font-size: 2.5rem; margin-bottom: 20px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 15px var(--neon-blue);
+        }
+        .feature-card h3 { color: var(--text-main); margin-bottom: 15px; }
+        .feature-card p { color: var(--text-muted); }
+
+        /* ================= MAPA SECTION (Integración Anterior) ================= */
+        .location-section { padding: 50px 0 100px; }
+        #map {
+            height: 450px;
+            width: 100%;
+            border-radius: 20px;
+            border: 2px solid var(--neon-blue); /* Borde neón */
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            z-index: 1;
+        }
+        .map-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-main);
+        }
+
+        /* ================= FOOTER ================= */
+        footer {
+            background-color: #050608;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 0;
+            text-align: center;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav>
+            <div class="logo">AdiraNet</div>
+            <div style="color: var(--text-main)">MENU</div>
+        </nav>
+    </div>
+
+    <header class="hero">
+        <div class="hero-content" data-aos="zoom-in">
+            <h1>ASCENDIFY</h1>
+            <h2>Tecnología inteligente para el mañana</h2>
+            
+            <button class="btn-draw">
+                <div class="button__line"></div>
+                <div class="button__line"></div>
+                <span class="button__text">INICIAR SISTEMA</span>
+                <div class="button__drow1"></div>
+                <div class="button__drow2"></div>
+            </button>
+
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="neu-card feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon-box"><i class="fas fa-microchip"></i></div>
+                    <h3>Procesamiento IA</h3>
+                    <p>Algoritmos neuronales que aprenden de tus datos.</p>
+                </div>
+                <div class="neu-card feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Ciberseguridad</h3>
+                    <p>Protección de grado militar con encriptación cuántica.</p>
+                </div>
+                <div class="neu-card feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="icon-box"><i class="fas fa-network-wired"></i></div>
+                    <h3>Conexión Neural</h3>
+                    <p>Interfaces cerebro-máquina para control total.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="location-section">
+        <div class="container">
+            <h2 class="map-title" data-aos="fade-down">NODO CENTRAL: AREQUIPA</h2>
+            <div id="map" data-aos="flip-up"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 AdiraNet Systems. Arequipa, Perú.</p>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 1. Iniciar Animaciones de Scroll
+        AOS.init({ duration: 1000, once: true });
+
+        // 2. Iniciar Mapa (Lógica del código anterior)
+        function initMap() {
+            // Coordenadas Arequipa, Perú
+            const map = L.map('map').setView([-16.3988, -71.5350], 15);
+
+            // Capa CartoDB Dark Matter (Estilo Futurista)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            // Marcador personalizado
+            L.marker([-16.3988, -71.5350]).addTo(map)
+                .bindPopup('<b style="color:black">AdiraNet HQ</b><br>Arequipa Sector 7G')
+                .openPopup();
+        }
+
+        // Ejecutar mapa
+        initMap();
+    </script>
+
+</body>
+</html>

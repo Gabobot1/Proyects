@@ -1,0 +1,772 @@
+@keyframes fadeInBody {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.swal-elegante {
+  border-radius: 15px !important;
+  padding: 20px !important;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4) !important;
+  backdrop-filter: blur(10px);
+}
+
+body {
+  animation: fadeInBody 0.6s ease-out;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  padding-top: 110px;
+  background-image: url(Arequipa.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #d4af37;
+
+    object-fit: cover;
+    display: block;
+}
+
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+/* Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 300px;                    
+    padding: 20px 15px;        
+    background: #8B0000;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+    display: none;
+    z-index: 999;
+}
+
+/* Mostrar menú */
+.user-dropdown.show {
+    display: block;
+}
+
+/* Avatar grande */
+.user-avatar-large {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    margin: auto;
+    display: block;
+}
+
+/* Bloque de texto del usuario */
+.user-info {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/* Nombre */
+.user-name {
+    margin: 5px 0 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+/* Email */
+.user-email {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #ffffff;
+}
+.user-info img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: contain;  
+    padding: 5px;
+}
+
+.user-dropdown hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 15px 0;
+}
+
+.user-dropdown.show {
+    display: block;
+}
+
+.logout-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s;
+  background-color: rgb(255, 65, 65);
+  gap: 10px; /* NUEVO → separa icono y texto */
+}
+
+/* Icono */
+.sign {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* CAMBIADO → ya no 100% */
+  height: 40px;
+  transition: 0.3s;
+}
+
+.sign svg {
+  width: 17px;
+}
+
+.sign svg path {
+  fill: white;
+}
+/* text */
+.text {
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.Btn:hover {
+  width: 200px;
+  border-radius: 40px;
+  transition-duration: .3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: .3s;
+  padding-left: 20px;
+}
+/* hover effect button's text */
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: .3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px ,2px);
+}
+h1 {
+    text-align: center;
+  color: #c57c3c;
+  font-size: 36px;
+    text-align: center;
+  color: #ffcc7a; 
+  font-size: 48px;
+  font-weight: bold;
+
+  text-shadow: 
+    0 0 8px #000,
+    0 0 15px #000,
+    0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 30px;
+}
+
+#registrationForm {
+  opacity: 50%;
+}
+
+#registros {
+  opacity: 100%;
+}
+
+form {
+  background-color: #555555;
+  border-radius: 5px;
+  padding: 20px;
+  width: 300px;
+}
+
+h2 {
+  margin-top: 0;
+  color: #ffffff;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  background-color:rgb(255, 65, 65);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: rgb(255, 65, 65);
+}
+
+  header {
+    position: fixed;
+    top: 0;
+    width: 98%;
+    background-color: #8B0000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 25px;
+    z-index: 1000;
+    box-shadow: 0 0 12px rgba(0,0,0,0.6);
+  }
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #8B0000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0px;
+  z-index: 1000;
+  box-shadow: 0 0 12px rgba(0,0,0,0.6);
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end;   /* ⭐ A la derecha */
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  padding-right: 40px;         /* ⭐ Espacio desde el borde */
+}
+
+nav a {
+  background: linear-gradient(to right, #c57c3c, #a15d2c);
+  padding: 8px 16px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 0 10px rgba(255, 200, 120, 0.25);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+/* EFECTO DORADO BRILLANTE (reflejo) */
+nav a::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.4), 
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: .5s;
+}
+
+/* EFECTO AL HACER HOVER */
+nav a:hover {
+  transform: translateY(-3px) scale(1.05);
+  color: #ffe3a1;
+  box-shadow: 0 0 15px rgba(255, 210, 140, 0.45);
+}
+
+/* PASO DEL REFLEJO */
+nav a:hover::after {
+  left: 120%;
+}
+
+/* Borde exterior dorado animado */
+nav a:hover {
+  border: 1px solid rgba(255, 220, 150, 0.8);
+}
+.redes-btn {
+    background: linear-gradient(to bottom, #c57c3c, #a15d2c);
+    padding: 10px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 45px;
+    height: 45px;
+
+    box-shadow: 0 0 10px rgba(255, 180, 90, 0.25);
+    cursor: pointer;
+    transition: .3s ease;
+    
+    position: relative;
+    overflow: hidden;
+}
+
+/* ICONOS */
+.redes-btn img {
+    width: 24px;
+    height: 24px;
+    transition: .3s ease;
+}
+
+/* ===== EFECTO HOVER ===== */
+.redes-btn:hover {
+    transform: translateY(-4px) scale(1.07);
+    box-shadow: 0 0 18px rgba(255, 200, 110, 0.45);
+    border: 1px solid rgba(255, 220, 160, 0.7);
+}
+
+/* Brillo elegante en hover */
+.redes-btn::after {
+    content: "";
+    position: absolute;
+    top: -150%;
+    left: -150%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(
+        circle,
+        rgba(255, 240, 180, 0.4),
+        transparent 60%
+    );
+    opacity: 0;
+    transition: .5s ease;
+}
+
+.redes-btn:hover::after {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+/* Zoom suave del icono */
+.redes-btn:hover img {
+    transform: scale(1.2);
+}
+
+/* ===== EFECTO RIPPLE AL DAR CLICK ===== */
+.redes-btn:active::before {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: rgba(255, 240, 190, 0.5);
+    border-radius: 50%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    animation: ripple .5s ease-out forwards;
+}
+
+@keyframes ripple {
+    0% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+    100% { transform: translate(-50%, -50%) scale(15); opacity: 0; }
+}
+
+
+.botones {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.botones a {
+  padding: 15px 25px;
+  background-color: #c57c3c;
+  color: white;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.hero {
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding: 150px 30px;
+}
+
+.hero video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+.hero h1 {
+  font-size: 40px;               
+  font-weight: 700;
+  color: #ffcc7a;
+  margin-bottom: 10px;
+
+  text-shadow:
+    0 0 6px #000,
+    0 0 12px rgba(0,0,0,0.8),
+    0 2px 4px rgba(0,0,0,0.9);
+}
+
+.hero h2 {
+  font-size: 32px;                
+  font-weight: 700;
+  color: #ffdd99;
+  margin-bottom: 15px;
+
+  text-shadow:
+    0 0 6px #000,
+    0 0 12px rgba(0,0,0,0.8),
+    0 2px 4px rgba(0,0,0,0.9);
+}
+
+.hero p {
+  font-size: 22px;                 
+  color: #ffe2b3;
+  font-weight: 600;
+  max-width: 900px;
+  margin: 0 auto 25px;
+
+  text-shadow:
+    0 0 6px #000,
+    0 0 12px rgba(0,0,0,0.8),
+    0 2px 4px rgba(0,0,0,0.9);
+}
+
+.historia-restaurante {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: rgba(0, 0, 0, 0.6);
+  margin: 40px auto;
+  max-width: 1100px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.historia-imagen {
+  flex: 1;
+  min-width: 300px;
+}
+
+.historia-imagen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.historia-texto {
+  flex: 1;
+  padding: 30px;
+  color: white;
+  font-family: 'Raleway', sans-serif;
+}
+
+.historia-texto h2 {
+  color: #c57c3c;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.historia-texto p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .historia-restaurante {
+    flex-direction: column;
+  }
+
+  .historia-texto {
+    padding: 20px;
+  }
+
+  .historia-texto h2 {
+    font-size: 22px;
+  }
+
+  .historia-texto p {
+    font-size: 14px;
+  }
+}
+.descripcion-restaurante {
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 60px 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.contenedor-descripcion {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+h2, h3 {
+  color: #cc9966;
+  margin-bottom: 15px;
+}
+
+p, li {
+  line-height: 1.6;
+  color: #dddddd;
+}
+
+.seccion-ofrecemos ul {
+  list-style: none;
+  padding: 0;
+}
+
+.seccion-ofrecemos li {
+  margin: 8px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.seccion-ofrecemos li::before {
+  content: '✔';
+  color: #cc9966;
+  position: absolute;
+  left: 0;
+}
+
+.galeria-interactiva .galeria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.galeria img {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.galeria img:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.opiniones-clientes {
+  margin: 40px 0;
+}
+
+.slider-opiniones {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 20px;
+  padding-bottom: 10px;
+}
+
+.opinion {
+  min-width: 300px;
+  background-color: #2a2a2a;
+  padding: 15px;
+  border-left: 5px solid #cc9966;
+  border-radius: 8px;
+  font-style: italic;
+}
+
+.botones-interaccion {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.boton-descripcion {
+  padding: 12px 30px;
+  background-color: #cc9966;
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.boton-descripcion:hover {
+  background-color: #b07e4e;
+}
+
+.boton-secundario {
+  background-color: transparent;
+  border: 2px solid #cc9966;
+  color: #cc9966;
+}
+
+.boton-secundario:hover {
+  background-color: #cc9966;
+  color: white;
+}
+
+.seccion-reserva {
+  background: rgba(0, 0, 0, 0.7) url('img/reserva-bg.jpg') no-repeat center/cover;
+  color: #fff;
+  padding: 50px 20px;
+}
+
+.reserva-contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.reserva-texto {
+  flex: 1;
+  min-width: 300px;
+}
+
+.formulario-reserva {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  min-width: 300px;
+}
+
+.formulario-reserva input,
+.formulario-reserva button {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+.formulario-reserva button {
+  background-color: #d4af37;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+.seccion-experiencia {
+  background-color: #f6f0d5;
+  padding: 60px 0;
+}
+
+.contenido-experiencia {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  align-items: center;
+  gap: 30px;
+  padding: 0 20px;
+}
+
+.imagen-experiencia {
+  flex: 1;
+  min-width: 300px;
+}
+
+.imagen-experiencia img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.texto-experiencia {
+  flex: 1;
+  min-width: 300px;
+}
+
+.texto-experiencia h4 {
+  font-size: 14px;
+  color: #8d5630;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.texto-experiencia h2 {
+  font-size: 36px;
+  color: #7a2f19;
+  margin: 10px 0;
+  line-height: 1.2;
+}
+
+.texto-experiencia p {
+  font-size: 17px;
+  color: #5c493b;
+  line-height: 1.6;
+}
+
+.invertido .contenido-experiencia {
+  flex-direction: row-reverse;
+}
+
+
+

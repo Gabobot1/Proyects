@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cerveza de Bodega</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="CSS/CervezaStyle.css">
+</head>
+
+<body>
+
+  <header>
+    <div>
+      <img src="Imagenes/logo.png" alt="Logo Madurada" height="40">
+    </div>
+    <nav>
+      <a href="LOGIN.html">Iniciar Sesión</a>
+      <a href="Menu.html">Nuestro Restaurante</a>
+      <a href="Carta.html">Carta</a>
+      <a href="CarneAsada.html">Carnes</a>
+      <a href="CervezadeBodega.html">Cerveza de bodega</a>
+      <a href="Contacto.html">Contacto</a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/instagram.png" alt="Instagram" width="20"></a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/facebook.png" alt="Facebook" width="20"></a>
+      <a href="carrito.html">
+        <img src="Imagenes/carrito.png" alt="Carrito" width="25" title="Ver carrito"></a>
+      <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h2>Cervezas de Bodega</h2>
+    <p class="intro">Disfruta de nuestra selección artesanal</p>
+
+    <section class="grid-menu">
+      <div id="productos-container">
+        <!-- Los productos se cargarán aquí dinámicamente desde la API -->
+      </div>
+      <div class="card">
+        <img src="Imagenes/andina.jpg" alt="Cerveza Andina">
+        <div class="card-info">
+          <h3>Cerveza Andina</h3>
+          <p>Toques herbales con notas de coca y eucalipto.</p>
+          <span>S/ 14.00</span>
+          <button onclick="agregarAlCarrito(20,'Cerveza Andina', 14.00)">Pedir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/NEGRA.jpeg" alt="Cerveza Negra Fuerte">
+        <div class="card-info">
+          <h3>Cerveza Negra Fuerte</h3>
+          <p>Sabores tostados y maltas robustas.</p>
+          <span>S/ 15.00</span>
+          <button onclick="agregarAlCarrito(21,'Cerveza Negra Fuerte', 15.00)">Pedir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/MARACUYA.jpeg" alt="Cerveza de Maracuyá">
+        <div class="card-info">
+          <h3>Cerveza de Maracuyá</h3>
+          <p>Refrescante y frutal, ideal para el verano.</p>
+          <span>S/ 13.00</span>
+          <button onclick="agregarAlCarrito(22,'Cerveza de Maracuyá', 13.00)">Pedir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/trigo.jpeg" alt="Cerveza de Trigo">
+        <div class="card-info">
+          <h3>Cerveza de Trigo</h3>
+          <p>Clásica, suave y con un toque de cítricos.</p>
+          <span>S/ 12.00</span>
+          <button onclick="agregarAlCarrito(23,'Cerveza de Trigo', 12.00)">Pedir</button>
+        </div>
+      </div>
+      </section>
+  </main>
+
+  <footer>
+    © 2025 Restaurante | Cervezas artesanales
+  </footer>
+
+  <script>
+    // Función para cargar productos dinámicamente desde la API
+    async function cargarProductos() {
+      try {
+        const response = await fetch('/productos/categoria/bodega'); // Filtra por categoría "bodega"
+        if (!response.ok) throw new Error('Error al cargar productos');
+        const productos = await response.json();
+        const container = document.getElementById('productos-container');
+        container.innerHTML = ''; // Limpia el contenedor antes de agregar
+        productos.forEach(producto => {
+          container.innerHTML += `
+            <div class="card">
+              <img src="${producto.Imagen || 'Imagenes/default.jpg'}" alt="${producto.Nombre}">
+              <div class="card-info">
+                <h3>${producto.Nombre}</h3>
+                <p>${producto.Descripcion}</p>
+                <span>S/ ${producto.Precio}</span>
+                <button onclick="agregarAlCarrito(${producto.ID_producto_pedido},'${producto.Nombre}', ${producto.Precio})">Pedir</button>
+              </div>
+            </div>
+          `;
+        });
+      } catch (error) {
+        console.error('Error cargando productos:', error);
+        document.getElementById('productos-container').innerHTML = '<p>Error al cargar productos. Intenta recargar la página.</p>';
+      }
+    }
+
+    // Función para agregar al carrito (igual que antes)
+    function agregarAlCarrito(id,nombre, precio) {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.push({
+        id: id,             
+        nombre: nombre,
+        precio: precio,
+        cantidad: 1
+      });
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+    Swal.fire({
+    title: "¡Producto agregado!",
+    text: `${nombre} fue añadido al carrito`,
+    icon: "success",
+    background: "linear-gradient(135deg, #2b0000, #180000)",
+    color: "#ffe6c7",
+    iconColor: "#ffcc66",
+    padding: "20px",
+    showConfirmButton: true,
+    confirmButtonText: "Aceptar",
+    confirmButtonColor: "#d4a84f",
+    customClass: {
+        popup: "swal-cart-popup",
+        confirmButton: "swal-cart-btn"
+    }
+});
+    }
+
+    // Función para cerrar sesión
+    function cerrarSesion() {
+      localStorage.removeItem("usuarioLogueado");
+      window.location.href = "LOGIN.html";
+    }
+
+    // Evento DOMContentLoaded para cargar productos y ocultar link de login si está logueado
+    window.addEventListener('DOMContentLoaded', () => {
+      cargarProductos(); // Carga productos dinámicamente
+      const loginLink = document.querySelector('a[href="LOGIN.html"]');
+      if (usuario && loginLink) {
+        loginLink.style.display = 'none';
+      }
+    });
+  </script>
+
+</body>
+
+</html>

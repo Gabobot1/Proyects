@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios</title>
+    <link rel="icon" type="images/png" href="Logo/Logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link href="https://fonts.googleapis.com/css2?family=Winky+Rough:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+ body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a3d3d;
+      padding-top: 100px
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+    }
+
+    .logo {
+      color: #00ff99;
+      font-size: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #00ff99;
+    }
+        .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      font-size: 24px;
+      color: #00ff99;
+      cursor: pointer;
+    }
+    .texto{
+        font-family: "Winky Rough", sans-serif;
+        font-size: 20px;
+    }
+    </style>
+</head>
+<body>
+    <header>
+          <div class="logo">
+    <a href="index.html" style="color: #00ff99; text-decoration: none;">Barriga Fit</a>
+  </div>
+        <nav>
+          <ul>
+                        <li>
+              <a href="index.html" style="color: #00ff99; text-decoration: none;">
+              <span class="material-symbols-outlined" style="vertical-align: middle;">home</span>
+              </a>
+            </li>
+            <li>
+              <span class="material-symbols-outlined" onclick="goBack()" style="cursor: pointer;">arrow_back_ios</span>
+            </li>
+            <li>
+              <span class="material-symbols-outlined" onclick="goForward()" style="cursor: pointer;">arrow_forward_ios</span>
+            </li>
+            <li><a href="Index.html">Inicio</a></li>
+            <li><a href="nostros.html">Acerca de Nosotros</a></li>
+            <li><a href="producto.html">Productos</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="contacto.html">Contáctanos</a></li>
+            <li><a href="login.html">Salir</a></li>
+            <li><a href="login.html">Login/Register</a></li>
+          </ul>
+        </nav>
+      </header>
+      <main class="texto" style="padding: 40px; color: #ffffff;">
+    <section id="servicios">
+      <h2 style="color: #00ff99; font-size: 32px;">Nuestros Servicios</h2>
+
+      <article style="margin-bottom: 30px;">
+        <h3 style="color: #00ff99;">Entrenamientos</h3>
+        <ul>
+          <li>Clases grupales: yoga, spinning, crossfit</li>
+          <li>Entrenamiento personalizado</li>
+          <li>Rutinas para bajar de peso, ganar músculo o mejorar resistencia</li>
+        </ul>
+      </article>
+
+      <article style="margin-bottom: 30px;">
+        <h3 style="color: #00ff99;">Asesoría Profesional</h3>
+        <ul>
+          <li>Evaluación física inicial</li>
+          <li>Planes de nutrición personalizados</li>
+          <li>Seguimiento con entrenadores certificados</li>
+        </ul>
+      </article>
+
+      <article style="margin-bottom: 30px;">
+        <h3 style="color: #00ff99;">Horarios y Reservas</h3>
+        <ul>
+          <li>Clases disponibles por horario</li>
+          <li>Reserva de sesiones privadas</li>
+          <li>Horario general de atención</li>
+        </ul>
+      </article>
+
+      <article style="margin-bottom: 30px;">
+        <h3 style="color: #00ff99;">Servicios Adicionales</h3>
+        <ul>
+          <li>Sauna y spa</li>
+          <li>Área de masajes</li>
+          <li>Lockers y suplemento bar</li>
+        </ul>
+      </article>
+      <article style="margin-bottom: 30px;">
+        <h3 style="color: #00ff99;">Planes y Membresías</h3>
+        <ul>
+          <li>Membresías mensuales, anuales, premium</li>
+          <li>Promociones especiales</li>
+          <li>Beneficios exclusivos para miembros</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+    <script>
+  function goBack() {
+    window.history.back();
+  }
+  function goForward() {
+    window.history.forward();
+  }
+</script>
+<script src="sesion.js"></script>
+</body>
+</html>

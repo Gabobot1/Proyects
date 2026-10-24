@@ -1,0 +1,275 @@
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(180deg, #731010, #4b0a0a);
+  color: #f4d7b5;
+}
+
+.admin-topbar {
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.admin-title {
+    font-size: 30px;
+    font-weight: bold;
+    flex-grow: 1;
+    color: #ffd27f;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+.btn-group-admin {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-admin {
+    padding: 6px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.25s;
+    color: white;
+}
+
+/* Botón Vista Usuario */
+.btn-user {
+    background: linear-gradient(to bottom, #ffd27f, #c5932b);
+}
+.btn-user:hover {
+    background: linear-gradient(to bottom, #ffe7a8, #d3a347);
+}
+
+/* Botón Cerrar Sesión */
+.btn-logout {
+    background: linear-gradient(to bottom, #d9534f, #b52d27);
+}
+.btn-logout:hover {
+    background: linear-gradient(to bottom, #e2716c, #c1342e);
+}
+/* Ajustes especiales para que el botón encaje en la tabla */
+.noselect {
+  width: 110px !important;
+  height: 36px !important;
+  background: #e62222;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-left: 12px; /* mueve texto a la izquierda */
+}
+
+/* Texto ELIMINAR */
+.noselect .text {
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+  transition: 200ms;
+}
+
+/* Icono X */
+.noselect .icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 36px;
+  width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid #c41b1b;
+  transition: 200ms;
+}
+.noselect:hover .text {
+  opacity: 0;
+}
+
+.noselect:hover .icon {
+  width: 110px;
+  border-left: none;
+}
+
+.noselect svg {
+  width: 15px;
+  fill: #eee;
+}
+
+#tablaProductos td {
+  vertical-align: middle;   /* centra el botón verticalmente */
+}
+
+/* --------------------------
+   TITULO
+--------------------------- */
+h1 {
+  text-align: center;
+  margin-top: 30px;
+  color: #ffddb3;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  font-size: 32px;
+}
+
+/* --------------------------
+   FORMULARIO
+--------------------------- */
+#formProducto {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 25px;
+  background: rgba(255, 238, 216, 0.08);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 214, 176, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+/* Labels */
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+  color: #ffdfb8;
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 220, 180, 0.4);
+  background: rgba(255, 248, 240, 0.9);
+  font-size: 16px;
+  outline: none;
+  box-sizing: border-box;
+  color: #4b0a0a;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #ffce82;
+  background: #fff5e7;
+  box-shadow: 0 0 6px rgba(255, 193, 94, 0.7);
+}
+
+/* --------------------------
+   TABLA MODERNA
+--------------------------- */
+#tablaProductos {
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#tablaProductos thead {
+    background: #a87a27 !important;
+    color: white;
+    text-transform: uppercase;
+}
+
+#tablaProductos tbody tr {
+    transition: 0.2s;
+}
+
+#tablaProductos tbody tr:hover {
+    background-color: rgba(255, 215, 0, 0.15) !important;
+}
+
+/* --------------------------
+   BOTÓN GUARDAR
+--------------------------- */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 25px;
+  background: linear-gradient(to bottom, #e9bb62, #b9872e);
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  color: #4b0a0a;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: linear-gradient(to bottom, #ffd28d, #c6923a);
+  transform: translateY(-2px);
+}
+
+
+.noselect:hover {
+ background: #ff3636;
+}
+
+
+
+.noselect:focus {
+ outline: none;
+}
+
+.noselect:active .icon svg {
+ transform: scale(0.8);
+}
+
+/* --------------------------
+   SweetAlert2 PERSONALIZADO
+--------------------------- */
+
+/* Fondo y tarjeta */
+.swal-dark-popup {
+    border-radius: 18px !important;
+    padding: 20px !important;
+    background: linear-gradient(135deg, #3b0000, #210000) !important;
+    box-shadow: 0 0 25px rgba(255, 150, 0, 0.5) !important;
+}
+
+/* Botón Confirmar */
+.swal-btn-confirm {
+    background: #e74c3c !important;
+    color: white !important;
+    padding: 10px 22px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    font-size: 16px !important;
+    margin: 5px;
+}
+.swal-btn-confirm:hover {
+    background: #c0392b !important;
+}
+
+/* Botón Cancelar */
+.swal-btn-cancel {
+    background: #34495e !important;
+    color: white !important;
+    padding: 10px 22px !important;
+    border-radius: 10px !important;
+    border: none !important;
+    font-size: 16px !important;
+    margin: 5px;
+}
+.swal-btn-cancel:hover {
+    background: #2c3e50 !important;
+}
+
+/* --------------------------
+   ALERTA BOOTSTRAP
+--------------------------- */
+#alertas .alert {
+    border-radius: 8px;
+    font-size: 16px;
+    text-align: center;
+}

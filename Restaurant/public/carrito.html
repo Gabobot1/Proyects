@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrito de Compras</title>
+  <link rel="stylesheet" href="CSS/carrito.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header>
+    <div>
+      <img src="Imagenes/logo.png" alt="Logo Madurada" height="40">
+    </div>
+    <nav>
+      <a href="LOGIN.html" id="link-login">Iniciar Sesión</a>
+      <a href="Menu.html">Nuestro Restaurante</a>
+      <a href="Carta.html">Carta</a>
+      <a href="CarneAsada.html">Carnes</a>
+      <a href="CervezadeBodega.html">Cerveza de bodega</a>
+      <a href="Contacto.html">Contacto</a>
+
+      <a href="#" class="redes-btn insta"><img src="Imagenes/instagram.png" alt="Instagram" width="20"></a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/facebook.png" alt="Facebook" width="20"></a>
+
+      <a href="carrito.html">
+        <img src="Imagenes/carrito.png" alt="Carrito" width="25" title="Ver carrito">
+      </a>
+
+      <a href="LOGIN.html" id="link-logout">Cerrar Sesión</a>
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <h2>Carrito de Compras</h2>
+
+    <ul id="lista-carrito"></ul>
+
+    <div id="total">
+      Total: <span id="precio-total">S/ 0.00</span>
+    </div>
+
+    <button id="reservar">Realizar Pedido</button>
+  </main>
+
+  <script src="JS/carrito.js"></script>
+
+  <script>
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const loginLink = document.getElementById('link-login');
+      const logoutLink = document.getElementById('link-logout');
+
+      if (usuario) {
+        loginLink.style.display = 'none';  
+        logoutLink.style.display = 'inline'; 
+      } else {
+        logoutLink.style.display = 'none'; 
+      }
+    });
+  </script>
+<script>
+document.getElementById("reservar").addEventListener("click", async () => {   
+
+  const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+  const usuario = localStorage.getItem("usuarioLogueado");
+
+  if (!carrito.length) {
+    Swal.fire({
+      title: "Carrito vacío",
+      text: "Agrega productos antes de realizar un pedido.",
+      icon: "warning",
+      confirmButtonColor: "#c08a3b"
+    });
+    return;
+  }
+
+  // AGRUPAR PRODUCTOS REPETIDOS
+  const productosUnificados = [];
+
+  carrito.forEach(item => {
+    const existente = productosUnificados.find(p => p.id === item.id);
+    if (existente) {
+      existente.cantidad += item.cantidad;
+    } else {
+      productosUnificados.push({ ...item });
+    }
+  });
+
+  try {
+    const response = await fetch("/crear-pedido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usuario,
+        productos: productosUnificados
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      Swal.fire({
+        title: "¡Pedido completado!",
+        text: "Tu pedido fue registrado exitosamente.",
+        icon: "success",
+        confirmButtonText: "Aceptar",
+        background: "#1b1b1b",
+        color: "#fff",
+        confirmButtonColor: "#c08a3b"
+      }).then(() => {
+        localStorage.removeItem("carrito");
+        window.location.href = "Menu.html";
+      });
+
+    } else {
+      Swal.fire({
+        title: "Error",
+        text: result.message,
+        icon: "error",
+        confirmButtonColor: "#c08a3b"
+      });
+    }
+
+  } catch (err) {
+    console.error("Error en la solicitud:", err);
+    Swal.fire({
+      title: "Error de conexión",
+      text: "No se pudo conectar con el servidor.",
+      icon: "error",
+      confirmButtonColor: "#c08a3b"
+    });
+  }
+});
+</script>
+</body>
+</html>

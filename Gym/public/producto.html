@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Productos</title>
+  <link rel="icon" type="images/png" href="Logo/Logo.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a3d3d;
+      padding-top: 100px
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      color: #00ff99;
+      font-size: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #00ff99;
+    }
+
+    .productos-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      padding: 40px;
+    }
+
+    .producto {
+      background-color: #004d4d;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ff99;
+      padding: 20px;
+      width: 220px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .producto:hover {
+      transform: scale(1.05);
+    }
+
+    .producto img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .producto h3 {
+      color: #00ff99;
+      margin: 15px 0 5px;
+    }
+
+    .producto p {
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      font-size: 24px;
+      color: #00ff99;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="index.html" style="color: #00ff99; text-decoration: none;">Barriga Fit</a>
+    </div>
+    <nav>
+      <ul>
+        <li>
+          <a href="index.html" style="color: #00ff99; text-decoration: none;">
+            <span class="material-symbols-outlined" style="vertical-align: middle;">home</span>
+          </a>
+        </li>
+        <li>
+          <span class="material-symbols-outlined" onclick="goBack()" style="cursor: pointer;">arrow_back_ios</span>
+        </li>
+        <li>
+          <span class="material-symbols-outlined" onclick="goForward()"
+            style="cursor: pointer;">arrow_forward_ios</span>
+        </li>
+        <li><a href="Index.html">Inicio</a></li>
+        <li><a href="nostros.html">Acerca de Nosotros</a></li>
+        <li><a href="producto.html">Productos</a></li>
+        <li><a href="servicios.html">Servicios</a></li>
+        <li><a href="catalogo.html">Catálogo</a></li>
+        <li><a href="contacto.html">Contáctanos</a></li>
+        <li><a href="login.html">Salir</a></li>
+        <li><a href="login.html">Login/Register</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="productos-container">
+    <div class="producto">
+      <img src="Imagenes/barra.png" alt="Barra de ejercicio">
+      <h3>Barra de Proteinas</h3>
+      <p>Ideal para levantamiento de pesas y entrenamiento de fuerza.</p>
+    </div>
+    <div class="producto">
+      <img src="Imagenes/pesa.png" alt="Pesa">
+      <h3>Pesa Rusa</h3>
+      <p>Perfecta para ejercicios funcionales y entrenamiento cardiovascular.</p>
+    </div>
+  <div class="producto">
+    <img src="https://images.unsplash.com/photo-1594381898411-846e7d193883?auto=format&fit=crop&w=600&q=80" alt="Mancuernas">
+    <h3>Mancuernas Ajustables</h3>
+    <p>Entrena todo el cuerpo desde casa.</p>
+  </div>
+
+  <div class="producto">
+    <img src="https://images.unsplash.com/photo-1593079831268-3381b0db4a77?auto=format&fit=crop&w=600&q=80" alt="Proteína whey">
+    <h3>Proteína Whey</h3>
+    <p>Recuperación y crecimiento muscular.</p>
+  </div>
+
+  <div class="producto">
+    <img src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?auto=format&fit=crop&w=600&q=80" alt="Guantes gimnasio">
+    <h3>Guantes de Gimnasio</h3>
+    <p>Protección y mejor agarre.</p>
+  </div>
+
+  <div class="producto">
+    <img src="https://images.unsplash.com/photo-1616279969856-759f316a5ac1?auto=format&fit=crop&w=600&q=80" alt="Colchoneta fitness">
+    <h3>Colchoneta Fitness</h3>
+    <p>Yoga, abdominales y estiramientos.</p>
+  </div>
+
+<div class="producto">
+  <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?auto=format&fit=crop&w=600&q=80" alt="Cuerda para saltar">
+  <h3>Cuerda para Saltar</h3>
+  <p>Cardio, resistencia y coordinación.</p>
+</div>
+<div class="producto">
+  <img src="https://assets.adidas.com/images/w_600,f_auto,q_auto/f4137a31cd484455927daf4f01464059_9366/Botella_Hidratante_Performance_075_Litros_Rojo_HT3519_01_standard.jpg" alt="Botella deportiva">
+  <h3>Botella Deportiva</h3>
+  <p>Hidratación durante el entrenamiento.</p>
+</div>
+
+  </div>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+    function goForward() {
+      window.history.forward();
+    }
+  </script>
+  <script src="sesion.js"></script>
+</body>
+
+</html>

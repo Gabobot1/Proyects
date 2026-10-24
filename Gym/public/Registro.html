@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario</title>
+    <link rel="icon" type="images/png" href="Logo/Logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+ body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a3d3d;
+      padding-top: 100px
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+    }
+    .logo {
+      color: #00ff99;
+      font-size: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 30px;
+    }
+
+    nav ul li {
+      display: inline;
+    }
+
+    nav ul li a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      color: #00ff99;
+    }
+    .formulario {
+  background-color: #00ff998a;
+  color: #000000;
+  width: 400px;
+  margin: 50px auto;
+  padding: 30px 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ff99;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.formulario label {
+  display: block;
+  margin: 12px 0 6px;
+  font-weight: bold;
+  text-align: left;
+}
+
+.formulario input[type="text"],
+.formulario input[type="password"],
+.formulario input[type="email"],
+.formulario input[type="tel"],
+.formulario input[type="date"] {
+  width: 100%; 
+  padding: 10px;
+  border: 1px solid #00ff99;
+  background-color: #002f2f;
+  color: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box; 
+}
+.formulario button {
+  width: 100%; 
+  padding: 10px;
+  background-color: #00ff99;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 10px;
+}
+
+.formulario button:hover {
+  background-color: #00cc77;
+  transform: scale(1.03);
+}
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      font-size: 24px;
+      color: #00ff99;
+      cursor: pointer;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="index.html" style="color: #00ff99; text-decoration: none;">Barriga Fit</a>
+        </div>      
+        <nav>
+          <ul>
+                        <li>
+              <a href="index.html" style="color: #00ff99; text-decoration: none;">
+              <span class="material-symbols-outlined" style="vertical-align: middle;">home</span>
+              </a>
+            </li>
+            <li>
+              <span class="material-symbols-outlined" onclick="goBack()" style="cursor: pointer;">arrow_back_ios</span>
+            </li>
+            <li>
+              <span class="material-symbols-outlined" onclick="goForward()" style="cursor: pointer;">arrow_forward_ios</span>
+            </li>
+            <li><a href="Index.html">Inicio</a></li>
+            <li><a href="nostros.html">Acerca de Nosotros</a></li>
+            <li><a href="producto.html">Productos</a></li>
+            <li><a href="servicios.html">Servicios</a></li>
+            <li><a href="catalogo.html">Catálogo</a></li>
+            <li><a href="contacto.html">Contáctanos</a></li>
+            <li><a href="login.html">Salir</a></li>
+            <li><a href="login.html">Login/Register</a></li>
+          </ul>
+        </nav>
+    </header>
+    <form class="formulario" id="registroForm">
+        <table>
+            <label>Nombre de la cuenta</label>
+            <input type="text" id="usuario" name="usuario" placeholder="Poner nombre de usuario" required>
+            <label>Contraseña</label>
+            <input type="password" id="contraseña" name="contraseña" placeholder="Contraseña de la cuenta" required>
+            <label>Confirmar Contraseña</label>
+            <input type="password" id="confirmarContraseña" name="confirmarContraseña" placeholder="Confirmar contraseña" required>
+            <label>Correo</label>
+            <input type="email" id="email" name="email" placeholder="ejemplo@gmail.com" required>
+            <label>Telefono</label>
+            <input type="tel" id="telefono" name="telefono" placeholder="Numero de telefono" maxlength="9" required>
+            <label>Fecha de nacimiento</label>
+            <input type="date" id="fechaNacimiento" name="fechaNacimiento" min="1980-01-01" max="2007-12-30" required>
+            <button type="submit">Registrar cuenta</button>
+            <button type="button" onclick="mandarAlLogin()">Iniciar Sesion</button>
+        </table>
+    </form>
+    <script>
+        const form = document.getElementById('registroForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const usuario = document.getElementById('usuario').value;
+            const contraseña = document.getElementById('contraseña').value;
+            const confirmarContraseña = document.getElementById('confirmarContraseña').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+            const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+
+            // Validar contraseñas
+            if (contraseña !== confirmarContraseña) {
+                alert('Las contraseñas no coinciden');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/registro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        usuario,
+                        contraseña,
+                        email,
+                        telefono,
+                        fechaNacimiento
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: 'Redirigiendo al login...',
+                        background: '#0a3d3d',
+                        color: '#00ff99',
+                        confirmButtonColor: '#00ff99',
+                        confirmButtonText: 'OK',
+                        iconColor: '#00ff99',
+                        allowOutsideClick: false,
+                        timer: 2000,
+                        timerProgressBar: true,
+                        timerProgressBarColor: '#00ff99'
+                    }).then(() => {
+                        window.location.href = 'login.html';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.error,
+                        background: '#0a3d3d',
+                        color: '#00ff99',
+                        confirmButtonColor: '#ff4141',
+                        confirmButtonText: 'OK',
+                        iconColor: '#ff4141'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error en la conexión con el servidor');
+            }
+        });
+
+        function mandarAlLogin(){
+            window.location.href = 'login.html';
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function goForward() {
+            window.history.forward();
+        }
+    </script>
+    <script src="sesion.js"></script>
+</body>
+</html>

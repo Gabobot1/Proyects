@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogo</title>
+    <link rel="icon" type="images/png" href="Logo/Logo.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:100,300,400,700" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+ body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a3d3d;
+      padding-top: 100px
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+    }
+
+    .logo {
+      color: #00ff99;
+      font-size: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+nav ul li a span.material-symbols-outlined {
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+nav ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #00ff99;
+}
+    h2 {
+  text-align: center;
+  color: #00ff99;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+#catalogo {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #0a3d3d;
+}
+
+.producto {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 13px 10px -7px rgba(0, 255, 153, 0.2);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0, 1);
+  position: relative;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.producto:hover {
+  box-shadow: 0px 30px 18px -8px rgba(0, 255, 153, 0.4);
+  transform: scale(1.05);
+}
+
+.producto-img-container {
+  position: relative;
+  overflow: hidden;
+  height: 200px;
+  background: #ffffff;
+}
+
+.producto img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.producto:hover img {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
+.producto-info {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.precio {
+  font-weight: bold;
+  color: #e91e63;
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+.cantidad-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 12px 0 12px 0;
+  background: linear-gradient(135deg, #00ff99, #00cc77);
+  padding: 8px;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 255, 153, 0.3);
+}
+
+.cantidad-selector button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+  background-color: #1a1a1a;
+  color: #00ff99;
+  font-weight: bold;
+  border: 2px solid #00ff99;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 18px;
+}
+
+.cantidad-selector button:hover {
+  background-color: #00ff99;
+  color: #000;
+  transform: scale(1.1);
+}
+
+.cantidad-input {
+  width: 50px;
+  padding: 6px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #1a1a1a;
+  color: #00ff99;
+  border: 2px solid #00ff99;
+  border-radius: 6px;
+}
+
+button {
+  padding: 10px 16px;
+  background-color: #00ff99;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 14px;
+  max-width: 100%;
+}
+
+button:hover {
+  background-color: #00cc77;
+  transform: scale(1.03);
+}
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      font-size: 24px;
+      color: #00ff99;
+      cursor: pointer;
+    }
+    .hamburguesa {
+  display: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #00ff99;
+  margin-left: auto;
+}
+
+@media screen and (max-width: 768px) {
+  nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    background-color: #1a1a1a;
+    width: 100%;
+    display: none;
+    padding: 20px 0;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  .hamburguesa {
+    display: block;
+  }
+
+  nav ul li {
+    width: auto;
+  }
+
+  nav ul li a,
+  .material-symbols-outlined {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+  }
+}
+    </style>
+</head>
+<body>
+    <body>
+    <header>
+  <div class="logo">
+    <a href="index.html" style="color: #00ff99; text-decoration: none;">Barriga Fit</a>
+  </div>
+  <div class="hamburguesa" onclick="toggleMenu()">☰</div>
+<nav>
+  <ul>
+    <li>
+      <a href="index.html">
+        <span class="material-symbols-outlined">home</span>
+      </a>
+    </li>
+    <li>
+      <a href="javascript:goBack()">
+        <span class="material-symbols-outlined">arrow_back_ios</span>
+      </a>
+    </li>
+    <li>
+      <a href="javascript:goForward()">
+        <span class="material-symbols-outlined">arrow_forward_ios</span>
+      </a>
+    </li>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="nostros.html">Acerca de Nosotros</a></li>
+    <li><a href="producto.html">Productos</a></li>
+    <li><a href="servicios.html">Servicios</a></li>
+    <li><a href="catalogo.html">Catálogo</a></li>
+    <li><a href="contacto.html">Contáctanos</a></li>
+    <li><a href="login.html">Iniciar Sesión</a></li>
+    <li><a href="javascript:cerrarSesion()" style="color: #ff6b6b;">Salir</a></li>
+  </ul>
+</nav>
+
+</header>
+          <section id="catalogo">
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="Imagenes/proteina.png" alt="Proteina">
+    </div>
+    <div class="producto-info">
+      <p><strong>Proteína</strong></p>
+      <span class="precio">S/.140.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod1','Proteína',140,'Proteína en polvo 1kg', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="Imagenes/guantes.png" alt="Guantes">
+    </div>
+    <div class="producto-info">
+      <p><strong>Guantes para pesas</strong></p>
+      <span class="precio">S/.15.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod2','Guantes para pesas',15,'Guantes acolchados para entrenamiento', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/files/PROIRON_PRODUCTO08663.jpg?v=1742248801&width=112" alt="Mancuernas ajustables">
+    </div>
+    <div class="producto-info">
+      <p><strong>Mancuernas ajustables</strong></p>
+      <span class="precio">S/.239.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod3','Mancuernas ajustables',239,'Juego de mancuernas ajustables de caucho', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/products/chaleco-con-peso-ajustable-proiron-peru-chaleco-con-peso-420975.jpg?v=1742581286&width=160" alt="Chaleco con peso">
+    </div>
+    <div class="producto-info">
+      <p><strong>Chaleco con peso</strong></p>
+      <span class="precio">S/.129.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod4','Chaleco con peso',129,'Chaleco lastrado ajustable', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/products/set-de-pesas-rusas20406952-833734.jpg?v=1741753937&width=160" alt="Kettlebells">
+    </div>
+    <div class="producto-info">
+      <p><strong>Kettlebell</strong></p>
+      <span class="precio">Desde S/.47.20</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod5','Kettlebell',47.2,'Pesa rusa de hierro fundido', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/files/ProIron_Marzo_202500083.jpg?v=1743004261&width=112" alt="Mat de yoga">
+    </div>
+    <div class="producto-info">
+      <p><strong>Mat de yoga</strong></p>
+      <span class="precio">S/.99.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod6','Mat de yoga',99,'Colchoneta NBR 10 mm', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/products/92447-357659.jpg?v=1710452253&width=160" alt="Soga para saltar">
+    </div>
+    <div class="producto-info">
+      <p><strong>Soga para saltar</strong></p>
+      <span class="precio">S/.69.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod7','Soga para saltar',69,'Jump rope con peso', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/files/set-de-3-bandas-de-resistencia-de-tela-elastica-proiron-peru-bandas-de-resistencia-de-tela-elastica-01.jpg?v=1742181258&width=160" alt="Bandas de resistencia">
+    </div>
+    <div class="producto-info">
+      <p><strong>Set bandas de resistencia</strong></p>
+      <span class="precio">S/.59.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod8','Set bandas de resistencia',59,'3 bandas de tela', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/files/tomatodo-libre-de-bpa-de-1-litro-proiron-peru_01.jpg?v=1745820946&width=112" alt="Tomatodo">
+    </div>
+    <div class="producto-info">
+      <p><strong>Botella deportiva</strong></p>
+      <span class="precio">S/.69.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod9','Botella deportiva',69,'Tomatodo Tritan 1L', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://www.proiron.pe/cdn/shop/products/cinturon-de-soporte-lumbar-proiron-peru-cinturon-de-soporte-557982.png?v=1710498748&width=112" alt="Cinturón lumbar">
+    </div>
+    <div class="producto-info">
+      <p><strong>Cinturón lumbar</strong></p>
+      <span class="precio">S/.129.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod10','Cinturón lumbar',129,'Soporte lumbar profesional', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://media.falabella.com/falabellaPE/140431300_01/w%3D800%2Ch%3D800%2Cfit%3Dpad" alt="Foam roller">
+    </div>
+    <div class="producto-info">
+      <p><strong>Foam roller</strong></p>
+      <span class="precio">S/.59.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod11','Foam roller',59,'Rodillo masajeador', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+  <div class="producto">
+    <div class="producto-img-container">
+      <img src="https://media.falabella.com/falabellaPE/139565581_01/w%3D800%2Ch%3D800%2Cfit%3Dpad" alt="Barra pull-up">
+    </div>
+    <div class="producto-info">
+      <p><strong>Barra pull-up</strong></p>
+      <span class="precio">S/.179.00</span>
+      <div class="cantidad-selector">
+        <button onclick="decrementarCantidad(this)">−</button>
+        <input type="number" class="cantidad-input" value="1" min="1" max="100">
+        <button onclick="incrementarCantidad(this)">+</button>
+      </div>
+      <button onclick="addToCartWithQty('prod12','Barra pull-up',179,'Barra para dominadas 92-124 cm', this)">Agregar al carrito</button>
+    </div>
+  </div>
+
+          </section>
+          <script>
+              function goBack() {
+                window.history.back();
+              }
+              function goForward() {
+                window.history.forward();
+              }
+              function toggleMenu() {
+    document.querySelector("nav ul").classList.toggle("show");
+  }
+
+  function cerrarSesion() {
+    fetch('/api/logout', { method: 'POST' })
+      .then(() => {
+        window.location.href = 'login.html';
+      })
+      .catch(err => console.error(err));
+  }
+
+  function incrementarCantidad(btn) {
+    const input = btn.parentElement.querySelector('.cantidad-input');
+    const valor = parseInt(input.value) || 1;
+    if (valor < 100) {
+      input.value = valor + 1;
+    }
+  }
+
+  function decrementarCantidad(btn) {
+    const input = btn.parentElement.querySelector('.cantidad-input');
+    const valor = parseInt(input.value) || 1;
+    if (valor > 1) {
+      input.value = valor - 1;
+    }
+  }
+
+  async function addToCartWithQty(id, nombre, precio, descripcion, btn) {
+    const cantidad = parseInt(btn.parentElement.querySelector('.cantidad-input').value) || 1;
+    try {
+      const apiBase = (location.protocol === 'file:' || !location.host) ? 'http://localhost:3000' : `${location.protocol}//${location.host}`;
+      const apiUrl = `${apiBase}/api/carrito/add`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ id, nombre, precio, cantidad, descripcion })
+      });
+      const data = await response.json().catch(()=>({}));
+      if (response.ok) {
+        Swal.fire({icon:'success', title:'Agregado', text: nombre + ' x' + cantidad + ' agregado al carrito', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#00ff99'});
+      } else {
+        Swal.fire({icon:'error', title:'Error', text: data.error || 'No se pudo agregar', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#ff4141'});
+      }
+    } catch(err){
+      console.error(err);
+      Swal.fire({icon:'error', title:'Error', text:'Error en la conexión', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#ff4141'});
+    }
+  }
+
+  async function addToCart(id, nombre, precio, descripcion){
+    try{
+      // Si la página se abre con file:// el origin está vacío, usar localhost:3000
+      const apiBase = (location.protocol === 'file:' || !location.host) ? 'http://localhost:3000' : `${location.protocol}//${location.host}`;
+      const apiUrl = `${apiBase}/api/carrito/add`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ id, nombre, precio, cantidad: 1, descripcion })
+      });
+      const data = await response.json().catch(()=>({}));
+      if (response.ok) {
+        Swal.fire({icon:'success', title:'Agregado', text: nombre + ' agregado al carrito', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#00ff99'});
+      } else {
+        Swal.fire({icon:'error', title:'Error', text: data.error || 'No se pudo agregar', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#ff4141'});
+      }
+    } catch(err){
+      console.error(err);
+      Swal.fire({icon:'error', title:'Error', text:'Error en la conexión', background:'#0a3d3d', color:'#00ff99', confirmButtonColor:'#ff4141'});
+    }
+  }
+          </script>
+          <script src="sesion.js"></script>
+</body>
+</html>

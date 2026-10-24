@@ -1,0 +1,598 @@
+.password-beam {
+  position: absolute;
+  right: 38px;
+  top: 50%;
+  width: 0;
+  height: 40px;
+  background: linear-gradient(90deg,
+      rgba(255, 255, 1, 0.664) 0%,
+      rgba(253, 253, 41, 0.603) 20%,
+      rgba(255, 255, 0, 0.2) 70%,
+      rgba(255, 255, 0, 0) 100%);
+  clip-path: polygon(100% 50%, 0 0, 0 100%);
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9999 !important;
+    filter: saturate(400%) brightness(150%);
+    box-shadow: 0 0 35px rgba(255,255,100,1), 
+              0 0 60px rgba(255,255,0,0.8);
+  transition: opacity .25s ease, width .25s ease;
+}
+
+.toggle-pass {
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 9999 !important;
+}
+
+
+.password-beam {
+  position: absolute;
+  right: 38px;
+  top: 50%;
+  width: 0;
+  height: 40px;
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity .25s ease, width .25s ease;
+  z-index: 9999 !important;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url(../Imagenes/Arequipa.jpg);
+  background-size: cover;
+  background-position: center;
+    overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.glass-alert {
+  position: fixed;
+  top: 30px;
+  left: 50% !important;
+  transform: translateX(-50%);
+  right: auto !important;
+  
+  padding: 20px 26px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 290px;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.28);
+
+  color: #fff;
+  font-size: 16px;
+
+  opacity: 1;
+  transform: translate(-50%, -20px);
+  transition: all 0.4s ease;
+  z-index: 999999998 !important;
+}
+
+
+.glass-alert.show {
+  transform: translateY(-50%, 8px);
+  opacity: 1;
+}
+
+
+.glass-alert.success {
+  border-left: 7px solid #4ade80;
+}
+
+.glass-alert.error {
+  border-left: 7px solid #f87171;
+}
+
+.glass-alert .icon {
+  font-size: 22px;
+}
+
+.glass-alert button {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
+  padding: 0 3px;
+  opacity: 0.8;
+  transition: 0.2s;
+}
+
+
+input.showing-pass {
+  color: #ffffff !important; 
+  background-color: #080808;
+}
+
+.password-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+.glass-alert {
+  pointer-events: auto;
+}
+
+
+.password-beam.active {
+  opacity: 1;
+  width: 305px;
+  filter: brightness(380%) saturate(260%);
+  box-shadow: 0 0 28px rgba(255,255,150,1);
+}
+
+#beamOverlay {
+  position: fixed;
+    border-radius: 25px;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.705);
+  backdrop-filter: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+  z-index: 999;
+}
+
+#beamOverlay.active {
+  opacity: 1;
+}
+
+.password-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  z-index: 1000;
+}
+.password-overlay.active {
+  opacity: 1;
+}
+
+
+#face-dialog {
+  position: absolute;
+  top: 180px;
+  left: 75%;
+  transform: translateX(-50%);
+  background: white;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  font-family: "Segoe UI", sans-serif;
+}
+
+#face-dialog.show {
+  opacity: 1;
+}
+
+
+/* -------------------------------------------------
+   😺 CONTENEDOR DE LA CARA
+   ------------------------------------------------- */
+.face-github {
+  width: 160px;
+  height: 160px;
+  position: relative;
+  margin: 0 auto 10px;
+  margin-top: 10px;
+  transition: transform .3s ease;
+}
+
+
+/* -------------------------------------------------
+   👀 OJOS
+   ------------------------------------------------- */
+.eye {
+  width: 26px;
+  height: 26px;
+  background: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 55px;
+  transition: transform 0.15s ease-out, opacity 0.25s;
+}
+
+.eye-left {
+  left: 35px;
+}
+
+.eye-right {
+  right: 35px;
+}
+
+
+/* -------------------------------------------------
+   🌪 OJOS MAREADOS (ESPIRAL)
+   ------------------------------------------------- */
+.dizzy .eye {
+  width: 28px;
+  height: 28px;
+  background: none;
+  border-radius: 50%;
+  border: 3px solid black;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  animation: spinEye .8s linear infinite;
+  opacity: 1 !important;
+}
+
+@keyframes spinEye {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* -------------------------------------------------
+   🙈 OJOS CERRADOS (CONTRASEÑA)
+   ------------------------------------------------- */
+.cover-eyes .eye {
+  width: 32px;
+  height: 5px;
+  background: #000;
+  border-radius: 20px;
+  transform: translateY(16px);
+  opacity: 0.95;
+}
+
+
+/* -------------------------------------------------
+   👄 BOCA
+   ------------------------------------------------- */
+.mouth {
+  width: 55px;
+  height: 8px;
+  background: #000;
+  border-radius: 20px;
+  position: absolute;
+  bottom: 45px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all .25s ease;
+}
+
+/* Expresiones */
+.happy .mouth {
+  height: 16px;
+  border-radius: 0 0 30px 30px;
+}
+
+.nervous .mouth {
+  width: 25px;
+  height: 3px;
+}
+
+.surprised .mouth {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+}
+
+.laugh .mouth {
+  width: 60px;
+  height: 22px;
+  border-radius: 0 0 40px 40px;
+}
+
+.shy .mouth {
+  width: 40px;
+  height: 5px;
+  transform: translateX(-50%) translateY(5px);
+}
+
+.sad .mouth {
+  width: 35px;
+  height: 6px;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.suspicious .mouth {
+  width: 30px;
+  height: 3px;
+  transform: translateX(-50%) rotate(-10deg);
+}
+
+
+/* -------------------------------------------------
+   💤 ESTADO DORMIDO (OJOS + RESPIRACIÓN)
+   ------------------------------------------------- */
+.sleepy {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+.sleepy .eye {
+  width: 32px;
+  height: 4px;
+  opacity: .45 !important;
+  transform: translateY(15px) scaleY(0.2) !important;
+  border-radius: 20px;
+}
+
+.sleepy .mouth {
+  width: 22px;
+  height: 4px;
+  opacity: .4;
+  transform: translateX(-50%) translateY(6px);
+}
+
+@keyframes breathe {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(3px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+/* -------------------------------------------------
+   👁 PARPADEO BONITO
+   ------------------------------------------------- */
+@keyframes softBlink {
+  0% {
+    transform: scaleY(1);
+  }
+
+  45% {
+    transform: scaleY(0.15);
+  }
+
+  55% {
+    transform: scaleY(0.15);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.blinking .eye {
+  animation: softBlink .22s ease-in-out;
+}
+
+
+/* -------------------------------------------------
+   👁👁 DOBLE PARPADEO OCASIONAL
+   ------------------------------------------------- */
+@keyframes doubleBlink {
+  0% {
+    transform: scaleY(1);
+  }
+
+  25% {
+    transform: scaleY(0.15);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+
+  75% {
+    transform: scaleY(0.15);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+}
+
+.double-blink .eye {
+  animation: doubleBlink .4s ease-in-out;
+}
+
+/* ——— Corazoncitos al pasar botón ——— */
+button:hover::after {
+  content: " 💗 💗";
+  font-size: 16px;
+  animation: floatHearts 1s ease-in-out;
+}
+
+@keyframes floatHearts {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+}
+
+
+.formulario {
+  width: 430px;
+  padding: 40px;
+  border-radius: 25px;
+  position: relative;
+  overflow: visible !important;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.9s ease;
+}
+
+/* ======== ANIMACIONES ======== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ======== TÍTULO ======== */
+h2 {
+  text-align: center;
+  font-size: 32px;
+  color: #ffffff;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+
+  animation: slideDown 0.6s ease;
+}
+
+/* ======== LABELS ======== */
+label {
+  color: #f9f9f9;
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* ======== INPUTS GLASS ======== */
+input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+
+  font-size: 15px;
+  margin-bottom: 18px;
+  transition: 0.3s ease;
+}
+
+/* Placeholder blanco */
+input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Glow al hacer focus */
+input:focus {
+  border-color: #00ffd5;
+  box-shadow: 0 0 12px rgba(0, 255, 213, 0.9);
+  transform: scale(1.03);
+  outline: none;
+}
+
+/* ======== BOTÓN GLASS PREMIUM ======== */
+button {
+  width: 100%;
+  padding: 14px;
+  font-size: 17px;
+  font-weight: bold;
+
+  background: linear-gradient(135deg, #00c6a7, #00796b);
+  color: #fff;
+
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  box-shadow: 0 8px 18px rgba(0, 255, 213, 0.35);
+  transition: 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0, 255, 213, 0.5);
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+/* ======== LINKS ======== */
+p {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #ffffff;
+}
+
+a {
+  color: #00ffe7;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ======== ROBOT SPLINE ======== */
+spline-viewer {
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  right: 40px;
+  bottom: 30px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 768px) {
+
+  spline-viewer {
+    display: none;
+  }
+
+  .formulario {
+    width: 90%;
+    padding: 30px;
+  }
+}

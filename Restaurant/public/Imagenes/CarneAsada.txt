@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carta de Carnes</title>
+  <link rel="stylesheet" href="CarneStyle">
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="Logo de Restaurante" height="40">
+  <nav>
+    <a href="Menu.html">Inicio</a>
+    <a href="#">Nosotros</a>
+    <a href="#">La Carta</a>
+    <a href="cervezas.html">Cervezas</a>
+    <a href="vinos.html">Vinos</a>
+    <a href="#">Contacto</a>
+  </nav>
+</header>
+
+<main class="contenido">
+  <h2>Carta de Carnes</h2>
+
+  <section class="carne-lista">
+
+    <div class="carne">
+      <h3>Lomo Fino a la Parrilla</h3>
+      <p>Jugoso corte de res cocinado al punto, acompañado de papas doradas y chimichurri casero.</p>
+    </div>
+
+    <div class="carne">
+      <h3>Costillas BBQ</h3>
+      <p>Costillas de cerdo cocidas lentamente y bañadas en nuestra salsa BBQ artesanal. Servido con ensalada y papas fritas.</p>
+    </div>
+
+    <div class="carne">
+      <h3>Churrasco Tradicional</h3>
+      <p>Corte de carne sazonado con especias peruanas, servido con arroz y plátano frito.</p>
+    </div>
+
+    <div class="carne">
+      <h3>Picanha al Carbón</h3>
+      <p>Corte brasileño de res a la brasa con papas rústicas y vegetales salteados.</p>
+    </div>
+
+    <div class="carne">
+      <h3>Anticuchos de Corazón</h3>
+      <p>Brochetas de corazón de res marinadas en ají panca, servidas con papas andinas y choclo.</p>
+    </div>
+
+    <div class="carne">
+      <h3>Filete de Alpaca</h3>
+      <p>Corte tierno de alpaca a la plancha con quinua salteada y crema de ají amarillo.</p>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  &copy; 2025 Restaurante de Carnes | Página de prueba
+</footer>
+
+</body>
+</html>

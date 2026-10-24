@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Restaurate - Restaurante</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="CSS/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<body>
+  <header>
+    <div>
+      <img src="Imagenes/logo.png" alt="Logo Madurada" height="40">
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+
+    <nav id="navMenu">
+      <a href="LOGIN.html" id="loginLink">Iniciar Sesión</a>
+      <a href="Menu.html">Nuestro Restaurante</a>
+      <a href="Carta.html">Carta</a>
+      <a href="CarneAsada.html">Carnes</a>
+      <a href="CervezadeBodega.html">Cerveza de bodega</a>
+      <a href="Contacto.html">Contacto</a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/instagram.png" alt="Instagram" width="20"></a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/facebook.png" alt="Facebook" width="20"></a>
+      <a href="carrito.html"><img src="Imagenes/carrito.png" alt="Carrito" width="25" title="Ver carrito"></a>
+      <div class="user-menu" id="userMenuContainer">
+        <img class="user-avatar" src="Imagenes/imagen_usuario.png" alt="Usuario">
+        <div class="user-dropdown">
+          <div class="user-info">
+            <img class="user-avatar-large" src="Imagenes/imagen_usuario.png" alt="Usuario grande">
+            <div>
+              <p class="user-name">Usuario</p>
+              <p class="user-email">correo@ejemplo.com</p>
+            </div>
+          </div>
+          <hr>
+          <div class="logout-container">
+          <button class="Btn" onclick="cerrarSesion()">
+            <div class="sign"><svg viewBox="0 0 512 512">
+                <path
+                  d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                </path>
+              </svg></div>
+            <div class="text">Cerrar Sesion</div>
+          </button>
+        </div>
+      </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <video autoplay muted loop>
+      <source src="Imagenes/Carne Asada.mp4" type="video/mp4">
+      Tu navegador no soporta el video.
+    </video>
+    <p>Sucursales en proceso</p>
+    <h1>Restaurante de prueba</h1>
+    <p>Ven a descubrir el Restaurante, historia de nuestro Restaurante.</p>
+
+    <div class="botones">
+      <a href="Carta.html">CARTA DE COMIDAS</a>
+      <a href="CartaVinos.html">CARTA DE VINOS</a>
+      <a href="MenuGrupo.html">MENÚ PARA GRUPOS</a>
+    </div>
+  </div>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <section class="seccion-experiencia invertido" data-aos="fade-left">
+    <div class="contenido-experiencia">
+      <div class="imagen-experiencia">
+        <img src="Imagenes/piedra.jpeg" alt="Plato típico">
+      </div>
+      <div class="texto-experiencia">
+        <h4>La volcanica</h4>
+        <h2>Disfruta una experiencia<br>culinaria excepcional</h2>
+        <p>
+          Nuestro lomo fino se sirve sobre una piedra volcánica ardiente, permitiendo que el cliente
+          termine su cocción a su gusto en la mesa, mientras disfruta del aroma y el chisporroteo del fuego.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="seccion-experiencia" data-aos="fade-right">
+    <div class="contenido-experiencia">
+      <div class="imagen-experiencia">
+        <img src="Imagenes/sabordeabuel.jpg" alt="Plato típico 1">
+      </div>
+      <div class="texto-experiencia">
+        <h4>TRADICIÓN</h4>
+        <h2>LA MAGIA DE LA COCINA<br> AREQUIPEÑA</h2>
+        <p>
+          Inspirada en generaciones de abuelas, nuestra cocina rescata el sabor auténtico de Arequipa: ajíes molidos a
+          piedra, caldos lentos y aromas que despiertan los recuerdos.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2 -->
+  <section class="seccion-experiencia" data-aos="fade-left">
+    <div class="contenido-experiencia">
+      <div class="texto-experiencia">
+        <h4>FUSIÓN</h4>
+        <h2>SABORES QUE<br>CRUZAN FRONTERAS</h2>
+        <p>
+          Combinamos ingredientes nativos con técnicas modernas. Desde la alpaca al horno hasta el queso helado
+          artesanal, cada plato es una fusión entre historia e innovación.
+        </p>
+      </div>
+      <div class="imagen-experiencia">
+        <img src="Imagenes/innovacion.png" alt="Plato típico 2">
+      </div>
+    </div>
+  </section>
+  <section class="seccion-experiencia" data-aos="fade-up">
+    <div class="contenido-experiencia">
+      <div class="imagen-experiencia">
+        <img src="Imagenes/sevive.jpg" alt="Plato típico 3">
+      </div>
+      <div class="texto-experiencia">
+        <h4>EXPERIENCIA</h4>
+        <h2>NO SOLO SE COME,<br>SE VIVE</h2>
+        <p>
+          Vive un ambiente acogedor con música andina suave, atención cálida y platos servidos sobre piedra volcánica.
+          Un momento que queda en la memoria.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="descripcion-restaurante">
+    <div class="contenedor-descripcion">
+
+      <div class="texto-intro">
+        <h2>Entre los Alpes y los Andes</h2>
+        <p>
+          En Zig Zag Restaurant, ofrecemos una experiencia culinaria inolvidable que fusiona la tradición alpina con los
+          sabores únicos de los Andes. Nuestro compromiso con la calidad, la hospitalidad y la innovación nos ha
+          convertido en un ícono gastronómico en Arequipa.
+        </p>
+      </div>
+
+      <div class="seccion-mision">
+        <h3>Nuestra Historia</h3>
+        <p>
+          Fundado en el corazón de la ciudad, Zig Zag nació del sueño de compartir la cultura suiza-peruana con el
+          mundo. Desde nuestros inicios, apostamos por platos servidos sobre piedras volcánicas calientes, un ambiente
+          acogedor y una atención de primera.
+        </p>
+      </div>
+
+      <div class="galeria-interactiva">
+        <h3>Galería</h3>
+        <div class="galeria">
+          <img src="Imagenes/piedra a la volcanica.jpg" alt="Plato 1">
+          <img src="Imagenes/interior.jpg" alt="Interior restaurante">
+          <img src="Imagenes/cheft.jpg" alt="Chef preparando">
+          <img src="Imagenes/postres.jpg" alt="Postres">
+        </div>
+      </div>
+
+      <div class="opiniones-clientes">
+        <h3>Lo que dicen nuestros clientes</h3>
+        <div class="slider-opiniones">
+          <div class="opinion">"¡Una experiencia inolvidable! El servicio y la comida fueron perfectos." — Laura M.
+          </div>
+          <div class="opinion">"Volvería una y mil veces. La carne sobre piedra es espectacular." — Jorge R.</div>
+          <div class="opinion">"Ambiente romántico y acogedor. Ideal para cenas especiales." — Ana P.</div>
+        </div>
+      </div>
+
+      <div class="botones-interaccion">
+        <a href="Carta.html" class="boton-descripcion">Ver Carta</a>
+        <a href="Contacto.html" class="boton-descripcion">Contactanos</a>
+      </div>
+
+    </div>
+  </section>
+
+
+  <section class="seccion-reserva" id="reserva">
+    <div class="reserva-contenedor">
+      <div class="reserva-texto">
+        <h2>RESERVA UNA MESA</h2>
+        <p>
+          Haz de este encuentro un momento especial, donde el calor de la cocina arequipeña te envuelva,
+          y cada bocado te cuente una historia que quedará en tu memoria.
+        </p>
+      </div>
+      <form id="formReserva" class="formulario-reserva">
+        <input type="text" id="nombre" placeholder="Nombre*" required>
+        <input type="text" id="telefono" placeholder="Teléfono*" required>
+        <input type="time" id="hora" step="1" required>
+        <input type="date" id="fecha" placeholder="Fecha*" required>
+        <input type="number" id="personas" placeholder="Número de personas*" required>
+        <button type="submit" id="btnReserva">GENERAR RESERVA</button>
+
+      </form>
+    </div>
+  </section>
+  <section class="ubicacion">
+    <h2>Encuéntranos</h2>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3901.622861899439!2d-71.535!3d-16.409!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91424af13c3ad1cf%3A0xf7f82869a9b!2sArequipa!5e0!3m2!1ses!2spe!4v1700000000000"
+      width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy">
+    </iframe>
+  </section>
+
+
+  <section class="faq">
+    <h2>Preguntas Frecuentes</h2>
+    <div class="pregunta">
+      <h4>¿Se necesita reserva previa?</h4>
+      <p>Sí, recomendamos reservar con anticipación, especialmente en fines de semana.</p>
+    </div>
+    <div class="pregunta">
+      <h4>¿Tienen opciones vegetarianas?</h4>
+      <p>¡Claro! Contamos con una sección especial para vegetarianos y veganos.</p>
+    </div>
+  </section>
+  <script>
+    function cerrarSesion() {
+      localStorage.removeItem("usuarioLogueado");
+      updateAuthLinks();
+      window.location.href = "LOGIN.html";
+    }
+
+    function toggleMenu() {
+      const nav = document.getElementById("navMenu");
+      nav.classList.toggle("show");
+    }
+
+    function updateAuthLinks() {
+      const loginLink = document.getElementById("loginLink");
+      const userMenu = document.getElementById("userMenuContainer");
+      const avatar = document.querySelector(".user-avatar");
+      const avatarDrop = document.querySelector(".user-avatar-large");
+      const userName = document.querySelector(".user-name");
+      const userEmail = document.querySelector(".user-email");
+
+      const correo = localStorage.getItem("usuarioLogueado");
+      const nombre = localStorage.getItem("nombreUsuario");
+      const fotoUsuario = localStorage.getItem("fotoUsuario");
+
+      const isLogged = correo && correo !== "null";
+
+      loginLink.style.display = isLogged ? "none" : "inline-block";
+      userMenu.style.display = isLogged ? "flex" : "none";
+
+      if (isLogged) {
+        userName.textContent = nombre || "Usuario";
+        userEmail.textContent = correo;
+
+        const imgSrc = fotoUsuario || "Imagenes/imagen_usuario.png";
+
+        avatar.src = imgSrc;
+        avatarDrop.src = imgSrc;
+      }
+    }
+
+    document.addEventListener("click", function (e) {
+      const avatar = document.querySelector(".user-avatar");
+      const dropdown = document.querySelector(".user-dropdown");
+
+      if (avatar.contains(e.target)) {
+        dropdown.classList.toggle("show");
+      } else if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove("show");
+      }
+    });
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const fechaInput = document.getElementById("fecha");
+      updateAuthLinks();
+      let hoy = new Date();
+      hoy.setMinutes(hoy.getMinutes() - hoy.getTimezoneOffset());
+      const fechaHoy = hoy.toISOString().split("T")[0];
+      fechaInput.setAttribute("min", fechaHoy);
+      const form = document.querySelector(".formulario-reserva");
+
+      if (!form) {
+        console.error("⚠ No se encontró el formulario de reserva");
+        return;
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const fechaSeleccionada = document.getElementById("fecha").value;
+        if (fechaSeleccionada < fechaHoy) {
+          alert("La fecha no puede ser menor al día de hoy.");
+          return;
+        }
+        let horaRaw = document.getElementById("hora").value;
+        let horaSQL = horaRaw.length === 5 ? horaRaw + ":00" : horaRaw;
+        const data = {
+          correo: localStorage.getItem("usuarioLogueado"),
+          nombre: document.getElementById("nombre").value,
+          telefono: document.getElementById("telefono").value,
+          fecha: fechaSeleccionada,
+          hora: horaSQL,
+          personas: document.getElementById("personas").value
+        };
+
+        const res = await fetch("http://localhost:3000/crear-reserva", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const respuesta = await res.json();
+        Swal.fire({
+          title: "Reserva creada",
+          text: respuesta.message,
+          icon: "success",
+          confirmButtonText: "Aceptar",
+          background: "#1c1f2b",
+          color: "#fff",
+          confirmButtonColor: "#d4af37",
+          customClass: {
+            popup: "swal-elegante"
+          }
+        });
+
+      });
+    });
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+  </script>
+</body>
+
+</html>

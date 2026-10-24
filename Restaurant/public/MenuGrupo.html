@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú para Grupos</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="CSS/MenuGrupoStyle.css" />
+</head>
+
+<body>
+
+  <header>
+    <div>
+      <img src="Imagenes/logo.png" alt="Logo Madurada" height="40">
+    </div>
+    <nav>
+      <a href="LOGIN.html">Iniciar Secion</a>
+
+      <a href="Menu.html">Nuestro Restaurante</a>
+      <a href="Carta.html">Carta</a>
+      <a href="CarneAsada.html">Carnes</a>
+      <a href="CervezadeBodega.html">Cerveza de bodega</a>
+      <a href="Contacto.html">Contacto</a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/instagram.png" alt="Instagram" width="20"></a>
+      <a href="#" class="redes-btn insta"><img src="Imagenes/facebook.png" alt="Facebook" width="20"></a>
+      <a href="carrito.html">
+        <img src="Imagenes/carrito.png" alt="Carrito" width="25" title="Ver carrito"></a>
+      <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+
+    </nav>
+  </header>
+
+  <main class="contenido">
+    <div class="titulo-grupo">
+      <h2>Menú para Grupos</h2>
+      <p>Opciones pensadas para reuniones familiares, amigos o eventos especiales.</p>
+    </div>
+
+    <section class="grid-menu">
+      <div class="card">
+        <img src="Imagenes/menuROCOTO.webp" alt="Menú Familiar">
+        <div class="card-info">
+          <h3>Menú Familiar</h3>
+          <p>Incluye rocoto relleno, adobo, pastel de papa, postres y bebidas. Para 5 personas.</p>
+          <span>S/ 160.00</span>
+          <button onclick="agregarAlCarrito(24,'Menú Familiar', 160.00)">Pedir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/parrilladas.jpeg" alt="Menú Corporativo">
+        <div class="card-info">
+          <h3>Menú Corporativo</h3>
+          <p>Entradas variadas, carnes a la parrilla, cervezas artesanales. Para 10 personas.</p>
+          <span>S/ 320.00</span>
+          <button onclick="agregarAlCarrito(25,'Menú Corporativo', 320.00)">Pedir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/menuvegano.jpeg" alt="Menú Vegetariano">
+        <div class="card-info">
+          <h3>Menú Vegetariano</h3>
+          <p>Ensaladas de quinua, pastel de verduras y jugos naturales. Para 4 personas.</p>
+          <span>S/ 120.00</span>
+          <button onclick="agregarAlCarrito(26,'Menú Vegetariano', 120.00)">Pedir</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="Imagenes/menujovenes.jpeg" alt="Combo Jóvenes">
+        <div class="card-info">
+          <h3>Combo Jóvenes</h3>
+          <p>Hamburguesas de alpaca, papas nativas, cervezas de maracuyá. Para 6 personas.</p>
+          <span>S/ 180.00</span>
+          <button onclick="agregarAlCarrito(27,'Combo Jóvenes', 180.00)">Pedir</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    © 2025 Restaurante | Menú para Grupos
+  </footer>
+
+  <script>
+    function agregarAlCarrito(id,nombre, precio) {
+      let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            carrito.push({
+        id: id,             
+        nombre: nombre,
+        precio: precio,
+        cantidad: 1
+      });
+      localStorage.setItem('carrito', JSON.stringify(carrito));
+      Swal.fire({
+        title: "¡Producto agregado!",
+        text: `${nombre} fue añadido al carrito`,
+        icon: "success",
+        background: "linear-gradient(135deg, #2b0000, #180000)",
+        color: "#ffe6c7",
+        iconColor: "#ffcc66",
+        padding: "20px",
+        showConfirmButton: true,
+        confirmButtonText: "Aceptar",
+        confirmButtonColor: "#d4a84f",
+        customClass: {
+          popup: "swal-cart-popup",
+          confirmButton: "swal-cart-btn"
+        }
+      });
+    }
+  </script>
+
+  <script>
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const loginLink = document.querySelector('a[href="LOGIN.html"]');
+      if (usuario && loginLink) {
+        loginLink.style.display = 'none';
+      }
+    });
+  </script>
+  <script>
+    function cerrarSesion() {
+      localStorage.removeItem("usuarioLogueado");
+      window.location.href = "LOGIN.html";
+    }
+  </script>
+</body>
+
+</html>

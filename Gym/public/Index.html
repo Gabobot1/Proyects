@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barriga fit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount+Grid+Double&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manufacturing+Consent&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="icon" type="images/png" href="Logo/Logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0a3d3d;
+      padding-top: 100px
+    }
+
+    header {
+      background-color: #1a1a1a;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+    }
+
+    .logo {
+      color: #00ff99;
+      font-size: 25px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+nav ul li a span.material-symbols-outlined {
+  font-size: 24px;
+  vertical-align: middle;
+}
+
+nav ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #00ff99;
+}
+
+    .bienvenida{
+        text-align: center;
+        font-size: 50px;
+        font-family: 'Bitcount Grid Double', sans-serif;
+        color: #00ff99;
+    }
+    .t1{
+        text-align: center;
+        font-size: 30px;
+        font-family:"Permanent Marker", cursive;
+        color: #00ff99;
+    }
+    .carrusel {
+        width: 100%;
+        overflow: hidden;
+    }
+    .imagenes {
+        display: flex;
+        align-items: center;
+        justify-content: center; 
+        width: 900px;
+        height: 900px;
+        animation: deslizar 8s ease-in-out infinite;
+        border: 4px solid #00ff99;
+        box-sizing: border-box; 
+    }
+
+    .imagenes img {
+        width: 100%;
+        height: auto;
+        border: 4px solid #00ff99;
+    }
+
+    @keyframes deslizar {
+        0%   { transform: translateX(100%); }
+        33%  { transform: translateX(-100%); }
+        66%  { transform: translateX(-100%); }
+        100% {transform: translateX(100%);}
+    }
+    .texto{
+        color: #00ff99;
+        font-size: 28px;
+        font-family: "Manufacturing Consent", system-ui;
+    }
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+      font-size: 24px;
+      color: #00ff99;
+      cursor: pointer;
+    }
+.hamburguesa {
+  display: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #00ff99;
+  margin-left: auto;
+}
+
+@media screen and (max-width: 768px) {
+  nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    background-color: #1a1a1a;
+    width: 100%;
+    display: none;
+    padding: 20px 0;
+  }
+
+  nav ul.show {
+    display: flex;
+  }
+
+  .hamburguesa {
+    display: block;
+  }
+
+  nav ul li {
+    width: auto;
+  }
+
+  nav ul li a,
+  .material-symbols-outlined {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+  }
+}
+
+
+      </style>
+</head>
+<body>
+    <header>
+  <div class="logo">
+    <a href="index.html" style="color: #00ff99; text-decoration: none;">Barriga Fit</a>
+  </div>
+  <div class="hamburguesa" onclick="toggleMenu()">☰</div>
+<nav>
+  <ul>
+    <li>
+      <a href="index.html">
+        <span class="material-symbols-outlined">home</span>
+      </a>
+    </li>
+    <li>
+      <a href="javascript:goBack()">
+        <span class="material-symbols-outlined">arrow_back_ios</span>
+      </a>
+    </li>
+    <li>
+      <a href="javascript:goForward()">
+        <span class="material-symbols-outlined">arrow_forward_ios</span>
+      </a>
+    </li>
+    <li><a href="index.html">Inicio</a></li>
+    <li><a href="nostros.html">Acerca de Nosotros</a></li>
+    <li><a href="producto.html">Productos</a></li>
+    <li><a href="servicios.html">Servicios</a></li>
+    <li><a href="catalogo.html">Catálogo</a></li>
+    <li><a href="contacto.html">Contáctanos</a></li>
+    <li><a href="login.html">Salir</a></li>
+    <li><a href="login.html">Login/Register</a></li>
+  </ul>
+</nav>
+
+</header>
+      <h1 class="bienvenida">Bienvenidos a Barriga Fit</h1>
+      <div class="carrusel">
+        <div class="imagenes">
+            <img src="Pagina_princi/1.png" alt="recepcion">
+            <img src="Pagina_princi/2.png" alt="gimnasio">
+            <img src="Pagina_princi/3.png" alt="maquinas">
+        </div>
+      </div>
+      <h1 class="t1">Por que elegir <strong>Barriga Fit</strong></h1>
+      <p class="texto"><strong>F</strong>ortalece tu cuerpo y mente con programas diseñados para ti.</p>
+      <p class="texto"><strong>I</strong>nvierte en tu bienestar hoy y alcanza tu mejor versión mañana.</p>
+      <p class="texto"><strong>T</strong>ransforma tu estilo de vida con hábitos saludables y sostenibles.</p>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+  function goForward() {
+    window.history.forward();
+  }
+  function toggleMenu() {
+    document.querySelector("nav ul").classList.toggle("show");
+  }
+
+</script>
+<footer style="background-color:#1a1a1a; color:#00ff99; text-align:center; padding:20px; font-family:'Segoe UI', sans-serif;">
+  <p>Todos los derechos reservados.</p>
+</footer>
+<script src="sesion.js"></script>
+</body>
+</html>

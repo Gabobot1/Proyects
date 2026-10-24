@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Café Sensorial | Experience</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap-grid.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        /* ================= 1. VARIABLES & SETUP ================= */
+        :root {
+            --neon-gold: #ffbd4a;
+            /* Dorado Neón Brillante */
+            --gold-dim: #C89B63;
+            /* Dorado Clásico */
+            --bg-color: #050505;
+            /* Negro Absoluto */
+            --text-main: #ECECEC;
+            --text-muted: #9A9A9A;
+            --card-bg: rgba(20, 20, 25, 0.6);
+            --card-border: rgba(200, 155, 99, 0.15);
+            --glass: blur(12px);
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+
+            /* Variables para el BOTÓN DE TRAZADO (Gold Edition) */
+            --line_color: var(--neon-gold);
+            --back_color: rgba(200, 155, 99, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        /* ================= LOADER GEAR BACKGROUND ================= */
+
+        .gearbox-bg {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at center,
+                    rgba(255, 189, 74, 0.12),
+                    rgba(0, 0, 0, 0.95) 70%);
+            z-index: 10000;
+        }
+
+        .gearbox-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            /* fondo real */
+        }
+
+        .gearbox {
+            opacity: 0.22;
+            transform: scale(3.8);
+        }
+
+        .loader-text,
+        .loader-line-container {
+            position: relative;
+            z-index: 2;
+            /* texto encima */
+        }
+
+        body:not(.loaded) .hero {
+            visibility: hidden;
+        }
+
+
+        /* Overlay oscuro elegante */
+        .loader-overlay {
+            background: radial-gradient(circle at center,
+                    #0a0a0a 0%,
+                    #000 80%);
+        }
+
+        .gear-inner,
+        .gear-inner .bar {
+            background: linear-gradient(135deg,
+                    #3a2a16,
+                    var(--gold-dim));
+        }
+
+        .gear {
+            box-shadow:
+                0 0 12px rgba(255, 189, 74, 0.25),
+                inset 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .gear:after {
+            background: #0b0b0b;
+            box-shadow:
+                inset 0 0 10px rgba(0, 0, 0, 0.9),
+                0 0 10px rgba(255, 189, 74, 0.15);
+        }
+
+        .loader-overlay.hide .gearbox {
+            opacity: 0;
+            transform: scale(4.5);
+            transition: all 0.8s ease;
+        }
+
+        @keyframes clockwise {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes counter-clockwise {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+        }
+
+        /* ================= GEAR LOADER (Uiverse FIX) ================= */
+
+        .gearbox {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            transform: scale(4);
+            opacity: 0.25;
+        }
+
+        .gear {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            animation: clockwise 4s linear infinite;
+        }
+
+        .gear.large {
+            width: 130px;
+            height: 130px;
+        }
+
+        /* Posiciones */
+        .gear.one {
+            top: 0;
+            left: 60px;
+        }
+
+        .gear.two {
+            top: 60px;
+            left: 0;
+            animation: counter-clockwise 3.5s linear infinite;
+        }
+
+        .gear.three {
+            top: 60px;
+            right: 0;
+            animation: counter-clockwise 3s linear infinite;
+        }
+
+        .gear.four {
+            bottom: 0;
+            left: 35px;
+            animation: clockwise 6s linear infinite;
+        }
+
+        /* Núcleo del engranaje */
+        .gear-inner {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+        }
+
+        /* Agujero central */
+        .gear::after {
+            content: "";
+            position: absolute;
+            inset: 28%;
+            border-radius: 50%;
+        }
+
+        /* Dientes */
+        .gear-inner .bar {
+            position: absolute;
+            width: 12px;
+            height: 100%;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+        }
+
+        /* Rotación de dientes */
+        .gear-inner .bar:nth-child(1) {
+            transform: translateX(-50%) rotate(0deg);
+        }
+
+        .gear-inner .bar:nth-child(2) {
+            transform: translateX(-50%) rotate(60deg);
+        }
+
+        .gear-inner .bar:nth-child(3) {
+            transform: translateX(-50%) rotate(120deg);
+        }
+
+        .gear-inner .bar:nth-child(4) {
+            transform: translateX(-50%) rotate(180deg);
+        }
+
+        .gear-inner .bar:nth-child(5) {
+            transform: translateX(-50%) rotate(240deg);
+        }
+
+        .gear-inner .bar:nth-child(6) {
+            transform: translateX(-50%) rotate(300deg);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.7;
+            overflow-x: hidden;
+            height: 100vh;
+            overflow: hidden;
+            /* Bloqueamos scroll durante carga */
+        }
+
+        body.loaded {
+            height: auto;
+            overflow: auto;
+            overflow-x: hidden;
+        }
+
+        .loader-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center,
+                    rgba(15, 15, 15, 0.98),
+                    rgba(0, 0, 0, 1) 75%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            overflow: hidden;
+        }
+
+
+        .loader-text {
+            font-family: var(--font-serif);
+            font-size: 8vw;
+            color: var(--neon-gold);
+            margin-bottom: 1rem;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(255, 189, 74, 0.3);
+        }
+
+        .loader-line-container {
+            width: 200px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loader-line {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0%;
+            background: var(--neon-gold);
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        .loader-overlay.hide {
+            transform: translateY(-100%);
+        }
+
+        /* ================= 3. CUSTOM CURSOR ================= */
+        .cursor-dot {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 6px;
+            background: var(--neon-gold);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 100000;
+        }
+
+        .cursor-ring {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(200, 155, 99, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 99999;
+            transition: width 0.3s, height 0.3s, background 0.3s, border-color 0.3s;
+        }
+
+        body.hovering .cursor-ring {
+            width: 70px;
+            height: 70px;
+            background: rgba(200, 155, 99, 0.05);
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 15px rgba(255, 189, 74, 0.2);
+        }
+
+        /* ================= 4. UI ELEMENTS & NAV ================= */
+        .nav {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 0.8rem 2.5rem;
+            border-radius: 999px;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            opacity: 0;
+            transition: opacity 1s ease 1s;
+
+            /* 🔥 FIX */
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+
+        body.loaded .nav {
+            opacity: 1;
+        }
+
+        .nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+            font-family: var(--font-sans);
+            margin: 0;
+        }
+
+        .nav a:hover {
+            color: var(--neon-gold);
+            text-shadow: 0 0 8px var(--neon-gold);
+        }
+
+        /* ================= 5. HERO SECTION ================= */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: url("https://images.unsplash.com/photo-1497935586351-b67a49e012bf?q=80&w=2000&auto=format&fit=crop") center/cover no-repeat;
+            opacity: 0.2;
+            z-index: 0;
+            filter: grayscale(100%) contrast(1.1);
+            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 900px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(3.5rem, 8vw, 6.5rem);
+            line-height: 1.1;
+            color: var(--text-main);
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        .hero h1 i {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            font-style: italic;
+            color: var(--neon-gold);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease 0.8s;
+        }
+
+        .hero.active p {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Btn normal para Hero */
+        .btn-outline {
+            padding: 1rem 3rem;
+            border: 1px solid var(--gold-dim);
+            color: var(--gold-dim);
+            text-decoration: none;
+            border-radius: 999px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .btn-outline:hover {
+            background: var(--neon-gold);
+            color: #000;
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 20px var(--neon-gold);
+        }
+
+        /* ================= 6. MENU (3D Cards) ================= */
+        section {
+            padding: 8rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            color: var(--text-main);
+        }
+
+        .section-header p {
+            color: var(--neon-gold);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            height: 480px;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        /* --- Estilos Generales para el Grid (si no los tienes aún) --- */
+        /* --- 1. EL CONTENEDOR GRID --- */
+        .menu-grid {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 2rem;
+            background-color: #0a0a0a;
+            /* Fondo oscuro base */
+        }
+
+        /* --- 2. LA TARJETA (El marco) --- */
+        .card {
+            position: relative;
+            width: 320px;
+            /* Ancho fijo para uniformidad */
+            height: 480px;
+            /* Alto fijo */
+            background: #000;
+            /* Fondo de seguridad */
+            border-radius: 20px;
+            /* Radio externo */
+            overflow: hidden;
+            /* Mantiene la luz dentro de los límites */
+            z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        /* Efecto Hover: Levantar tarjeta */
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        /* --- 3. EL "COMETA" (Luz Giratoria) --- */
+        /* Usamos ::before para el degradado cónico que gira detrás */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: -2;
+
+            /* El degradado: Transparente -> Dorado Neón */
+            background: conic-gradient(transparent,
+                    transparent,
+                    transparent,
+                    var(--neon-gold)
+                    /* Tu variable de color */
+                );
+
+            /* La animación de giro */
+            animation: rotar-borde 4s linear infinite;
+        }
+
+        /* Capa extra para el brillo (Blur) al hacer hover */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            /* Un poco más grande para el resplandor */
+            background: conic-gradient(transparent,
+                    transparent,
+                    transparent,
+                    var(--neon-gold));
+            filter: blur(20px);
+            /* Difuminado para efecto neón */
+            animation: rotar-borde 4s linear infinite;
+            z-index: -1;
+            opacity: 0;
+            /* Invisible por defecto */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Encender el brillo al pasar el mouse */
+        .card:hover::after {
+            opacity: 1;
+        }
+
+        /* --- 4. LA MÁSCARA INTERIOR (El contenido) --- */
+        /* Esto tapa el centro del cometa para dejar solo el borde */
+        .card-inner {
+            position: absolute;
+            inset: 3px;
+            /* GROSOR DEL BORDE DE NEÓN (3px) */
+            background: #121212;
+            /* Color de fondo de la tarjeta */
+            border-radius: 16px;
+            /* Ligeramente menor que el padre */
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 5. AJUSTES DE IMAGEN Y TEXTO --- */
+        .card-image {
+            height: 55%;
+            /* La imagen ocupa el 55% de la tarjeta */
+            width: 100%;
+            overflow: hidden;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-image img {
+            transform: scale(1.1);
+            /* Zoom suave en la imagen */
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+        .card-content h3 {
+            font-family: var(--font-serif);
+            color: var(--text-main);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .price {
+            font-family: var(--font-serif);
+            color: var(--neon-gold);
+            font-size: 1.4rem;
+            font-style: italic;
+            align-self: flex-end;
+            /* Pone el precio a la derecha */
+            margin-top: auto;
+        }
+
+        /* --- ANIMACIÓN --- */
+        @keyframes rotar-borde {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ================= 7. FORM & MAP ================= */
+        .form-container {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        /* Inputs Estilo Uiverse Adaptados */
+        .form-control-ui {
+            position: relative;
+            margin: 25px 0 45px;
+            width: 100%;
+        }
+
+        .form-control-ui input {
+            background-color: transparent;
+            border: 0;
+            border-bottom: 1px solid var(--text-muted);
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .form-control-ui input:focus,
+        .form-control-ui input:valid {
+            outline: 0;
+            border-bottom-color: var(--neon-gold);
+            box-shadow: 0 1px 0 0 var(--neon-gold);
+        }
+
+        .form-control-ui label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .form-control-ui label span {
+            display: inline-block;
+            font-size: 16px;
+            min-width: 5px;
+            color: var(--text-muted);
+            transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .form-control-ui input:focus+label span,
+        .form-control-ui input:valid+label span {
+            color: var(--neon-gold);
+            transform: translateY(-30px);
+            text-shadow: 0 0 5px var(--neon-gold);
+        }
+
+        /* Mapa Dark Mode Futurista */
+        #map {
+            height: 450px;
+            width: 100%;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            filter: grayscale(100%) invert(100%) contrast(1.2);
+            /* Inversión para mapa oscuro */
+            transition: filter 0.5s;
+        }
+
+        #map:hover {
+            filter: grayscale(80%) invert(100%) contrast(1.1) brightness(1.1);
+            border-color: var(--neon-gold);
+        }
+
+        /* ================= 8. BOTÓN ANIMADO (DRAW) ================= */
+        .btn-draw {
+            position: relative;
+            width: 100%;
+            height: 56px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--line_color);
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button__text {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            text-transform: uppercase;
+        }
+
+        .btn-draw::before,
+        .btn-draw::after,
+        .button__text::before,
+        .button__text::after {
+            content: "";
+            position: absolute;
+            height: 2px;
+            border-radius: 2px;
+            background: var(--line_color);
+            transition: all 0.5s ease;
+            box-shadow: 0 0 8px var(--line_color);
+            /* Glow Effect */
+        }
+
+        .btn-draw::before {
+            top: 0;
+            left: 54px;
+            width: calc(100% - 128px);
+        }
+
+        .btn-draw::after {
+            top: 0;
+            right: 54px;
+            width: 8px;
+        }
+
+        .button__text::before {
+            bottom: 0;
+            right: 54px;
+            width: calc(100% - 128px);
+        }
+
+        .button__text::after {
+            bottom: 0;
+            left: 54px;
+            width: 8px;
+        }
+
+        .button__line {
+            position: absolute;
+            top: 0;
+            width: 56px;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .button__line::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 150%;
+            height: 100%;
+            box-sizing: border-box;
+            border-radius: 300px;
+            border: solid 2px var(--line_color);
+            box-shadow: 0 0 8px var(--line_color);
+        }
+
+        .button__line:nth-child(1),
+        .button__line:nth-child(1)::before {
+            left: 0;
+        }
+
+        .button__line:nth-child(2),
+        .button__line:nth-child(2)::before {
+            right: 0;
+        }
+
+        .btn-draw:hover {
+            letter-spacing: 6px;
+            color: #fff;
+            text-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        .btn-draw:hover::before,
+        .btn-draw:hover .button__text::before {
+            width: 8px;
+        }
+
+        .btn-draw:hover::after,
+        .btn-draw:hover .button__text::after {
+            width: calc(100% - 128px);
+        }
+
+        /* Animation Layers */
+        .button__drow1,
+        .button__drow2 {
+            position: absolute;
+            z-index: -1;
+            border-radius: 16px;
+            transform-origin: 16px 16px;
+            background: var(--back_color);
+        }
+
+        .button__drow1 {
+            top: -16px;
+            left: 40px;
+            width: 32px;
+            height: 0;
+            transform: rotate(30deg);
+        }
+
+        .button__drow2 {
+            top: 44px;
+            left: 77px;
+            width: 32px;
+            height: 0;
+            transform: rotate(-127deg);
+        }
+
+        .button__drow1::before,
+        .button__drow1::after,
+        .button__drow2::before,
+        .button__drow2::after {
+            content: "";
+            position: absolute;
+            background: var(--back_color);
+        }
+
+        .btn-draw:hover .button__drow1 {
+            animation: drow1 ease-in 0.06s forwards;
+        }
+
+        .btn-draw:hover .button__drow1::before {
+            animation: drow2 linear 0.08s 0.06s forwards;
+        }
+
+        .btn-draw:hover .button__drow1::after {
+            animation: drow3 linear 0.03s 0.14s forwards;
+        }
+
+        .btn-draw:hover .button__drow2 {
+            animation: drow4 linear 0.06s 0.2s forwards;
+        }
+
+        .btn-draw:hover .button__drow2::before {
+            animation: drow3 linear 0.03s 0.26s forwards;
+        }
+
+        .btn-draw:hover .button__drow2::after {
+            animation: drow5 linear 0.06s 0.32s forwards;
+        }
+
+        @keyframes drow1 {
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 100px;
+            }
+        }
+
+        @keyframes drow2 {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0;
+            }
+
+            11% {
+                opacity: 1;
+            }
+
+            100% {
+                width: 120px;
+            }
+        }
+
+        @keyframes drow3 {
+            0% {
+                width: 0;
+            }
+
+            100% {
+                width: 80px;
+            }
+        }
+
+        @keyframes drow4 {
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 120px;
+            }
+        }
+
+        @keyframes drow5 {
+            0% {
+                width: 0;
+            }
+
+            100% {
+                width: 150px;
+            }
+        }
+
+        /* ================= FOOTER PREMIUM (Adaptado) ================= */
+        footer {
+            /* Fondo oscuro con un toque muy sutil de café profundo */
+            background: linear-gradient(135deg, #050505 0%, #1a120b 100%);
+            color: var(--text-main);
+            padding: 80px 20px 30px;
+            border-top: 1px solid var(--card-border);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+            margin-bottom: 60px;
+        }
+
+        /* Logo elegante con gradiente dorado */
+        .footer-logo {
+            font-family: var(--font-serif);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--gold-dim) 0%, var(--neon-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        .footer-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 300px;
+        }
+
+        /* Enlaces de navegación */
+        .footer-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-header {
+            font-family: var(--font-sans);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .footer-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            font-size: 0.95rem;
+        }
+
+        .footer-nav a:hover {
+            color: var(--neon-gold);
+            transform: translateX(8px);
+            /* Deslizamiento elegante */
+            text-shadow: 0 0 10px rgba(255, 189, 74, 0.4);
+        }
+
+        /* Íconos Sociales con Efecto Glow Dorado */
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* El fondo animado del ícono */
+        .social-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gold-dim), var(--neon-gold));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+
+        .social-icon i {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .social-icon:hover::before {
+            opacity: 1;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(200, 155, 99, 0.4);
+            /* Sombra dorada */
+            border-color: transparent;
+        }
+
+        .social-icon:hover i {
+            color: #000;
+            /* Icono negro sobre fondo dorado */
+        }
+
+        /* Parte inferior */
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* ================= COMET CARD EFFECT ================= */
+
+        .card {
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        .card-inner {
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease-out;
+        }
+
+        /* Glow dinámico */
+        .comet-glow {
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            background: radial-gradient(400px circle at var(--x, 50%) var(--y, 50%),
+                    rgba(255, 189, 74, 0.25),
+                    transparent 40%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            mix-blend-mode: screen;
+        }
+
+        /* Activar brillo */
+        .card:hover .comet-glow {
+            opacity: 1;
+        }
+
+        /* Profundidad interna */
+        .card-image img {
+            transform: translateZ(40px);
+        }
+
+        .card-content {
+            transform: translateZ(60px);
+        }
+
+        /* ================= CART MODAL ================= */
+
+        .cart-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background: var(--neon-gold);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        .cart-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.4s ease;
+            z-index: 99999;
+        }
+
+        .cart-modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .cart-modal {
+            width: 420px;
+            max-height: 80vh;
+            background: #0f0f0f;
+            border-radius: 20px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--card-border);
+        }
+
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .cart-modal-title {
+            font-family: var(--font-serif);
+        }
+
+        .cart-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.2rem;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .cart-item-controls button {
+            background: none;
+            border: 1px solid var(--gold-dim);
+            color: var(--gold-dim);
+            padding: 0 8px;
+            border-radius: 6px;
+        }
+
+        .cart-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--card-border);
+            padding-top: 1rem;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--neon-gold);
+            color: #000;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 999px;
+            font-weight: bold;
+        }
+
+        /* ================= ADD TO CART BUTTON ================= */
+
+        .add-to-cart-btn {
+            margin-top: 1rem;
+            width: 100%;
+            padding: 0.7rem 1.2rem;
+            border-radius: 999px;
+            background: transparent;
+            border: 1px solid var(--gold-dim);
+            color: var(--gold-dim);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: all 0.35s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart-btn i {
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--neon-gold);
+            color: #000;
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 18px rgba(255, 189, 74, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .add-to-cart-btn:active {
+            transform: scale(0.96);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loader-overlay">
+        <div class="gearbox-bg">
+            <div class="gearbox">
+                <div class="overlay"></div>
+
+                <div class="gear one">
+                    <div class="gear-inner">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+
+                <div class="gear two">
+                    <div class="gear-inner">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+
+                <div class="gear three">
+                    <div class="gear-inner">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+
+                <div class="gear four large">
+                    <div class="gear-inner">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loader-text" id="loader-count">0%</div>
+        <div class="loader-line-container">
+            <div class="loader-line" id="loader-bar"></div>
+        </div>
+    </div>
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <nav class="nav">
+        <a href="#about" class="interactable">Esencia</a>
+        <a href="#menu" class="interactable">Menú</a>
+        <a href="#contact" class="interactable">Reserva</a>
+        <div class="cart-icon-wrapper interactable" id="cartIcon">
+            <i class="fas fa-shopping-cart cart-icon"></i>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+        </div>
+
+    </nav>
+
+    <header class="hero" id="about">
+        <div class="hero-content">
+            <h1 id="hero-title">
+                <span>El</span> <span><i>café</i></span> <span>como</span> <br>
+                <span>un</span> <span>ritual</span>
+            </h1>
+            <p>Donde la ingeniería se encuentra con el arte sensorial. Una pausa diseñada para tus sentidos.</p>
+            <br>
+            <a href="#menu" class="btn-outline interactable">Explorar Colección</a>
+        </div>
+    </header>
+
+    <section id="menu">
+        <div class="section-header" data-aos="fade-up">
+            <p>Selección de Autor</p>
+            <h2>Nuestra Carta</h2>
+        </div>
+
+        <div class="menu-grid">
+            <article class="card interactable" data-aos="fade-up" data-aos-delay="100">
+                <div class="card-inner">
+                    <div class="comet-glow"></div>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=800&auto=format&fit=crop"
+                            alt="Latte">
+                    </div>
+                    <div class="card-content">
+                        <h3>Latte Velvet</h3>
+                        <p>Microespuma sedosa vertida sobre espresso de doble origen.</p>
+                        <span class="price">S/.20.00</span>
+                        <button class="add-to-cart-btn interactable" data-name="Latte Velvet" data-price="20.00"
+                            data-image="https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=800&auto=format&fit=crop">
+                            <i class="fas fa-plus"></i> Añadir Producto
+                        </button>
+
+                    </div>
+                </div>
+            </article>
+
+            <article class="card interactable" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-inner">
+                    <div class="comet-glow"></div>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1610632380989-680fe40816c6?q=80&w=800&auto=format&fit=crop"
+                            alt="Espresso">
+                    </div>
+                    <div class="card-content">
+                        <h3>Espresso Noir</h3>
+                        <p>Extracción precisa de 25 segundos. Notas a cacao y nuez.</p>
+                        <span class="price">S/.15.00</span>
+                        <button class="add-to-cart-btn interactable" data-name="Espresso Noir" data-price="15.00"
+                            data-image="https://images.unsplash.com/photo-1610632380989-680fe40816c6?q=80&w=800&auto=format&fit=crop">
+                            <i class="fas fa-plus"></i> Añadir Producto
+                        </button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card interactable" data-aos="fade-up" data-aos-delay="300">
+                <div class="card-inner">
+                    <div class="comet-glow"></div>
+                    <div class="card-image">
+                        <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop"
+                            alt="Cold Brew">
+                    </div>
+                    <div class="card-content">
+                        <h3>Cold Brew Nitro</h3>
+                        <p>Maceración de 18 horas infusionada con nitrógeno.</p>
+                        <span class="price">S/.18.00</span>
+                        <button class="add-to-cart-btn interactable" data-name="Cold Brew Nitro" data-price="18.00"
+                            data-image="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop">
+                            <i class="fas fa-plus"></i> Añadir Producto
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <div class="section-header" data-aos="zoom-in">
+                <p>NODO CENTRAL: AREQUIPA</p>
+                <h2>Reserva tu Experiencia</h2>
+            </div>
+
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-5 mb-lg-0" data-aos="fade-right">
+                    <form class="form-container" id="bookingForm">
+                        <div class="form-control-ui">
+                            <input type="text" id="nombre" required autocomplete="off">
+                            <label>
+                                <span style="transition-delay:0ms">N</span><span
+                                    style="transition-delay:50ms">o</span><span
+                                    style="transition-delay:100ms">m</span><span
+                                    style="transition-delay:150ms">b</span><span
+                                    style="transition-delay:200ms">r</span><span style="transition-delay:250ms">e</span>
+                            </label>
+                        </div>
+                        <div class="form-control-ui">
+                            <input type="text" id="apellidos" required autocomplete="off">
+                            <label>
+                                <span style="transition-delay:0ms">A</span><span
+                                    style="transition-delay:50ms">p</span><span
+                                    style="transition-delay:100ms">e</span><span
+                                    style="transition-delay:150ms">l</span><span
+                                    style="transition-delay:200ms">l</span><span
+                                    style="transition-delay:250ms">i</span><span
+                                    style="transition-delay:300ms">d</span><span
+                                    style="transition-delay:350ms">o</span><span style="transition-delay:400ms">s</span>
+                            </label>
+                        </div>
+                        <div class="form-control-ui">
+                            <input type="text" id="direccion" required autocomplete="off">
+                            <label>
+                                <span style="transition-delay:0ms">D</span><span
+                                    style="transition-delay:50ms">i</span><span
+                                    style="transition-delay:100ms">r</span><span
+                                    style="transition-delay:150ms">e</span><span
+                                    style="transition-delay:200ms">c</span><span
+                                    style="transition-delay:250ms">c</span><span
+                                    style="transition-delay:300ms">i</span><span
+                                    style="transition-delay:350ms">ó</span><span style="transition-delay:400ms">n</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-draw interactable">
+                            <div class="button__line"></div>
+                            <div class="button__line"></div>
+                            <span class="button__text">Confirmar</span>
+                            <div class="button__drow1"></div>
+                            <div class="button__drow2"></div>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-lg-7" data-aos="fade-left">
+                    <div style="padding: 1rem;">
+                        <div id="map" class="interactable"></div>
+                        <p style="color: var(--text-muted); margin-top: 1rem; font-size: 0.85rem; text-align: right;">
+                            <i class="fas fa-map-marker-alt" style="color: var(--neon-gold);"></i> Arequipa, PE
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div>
+                <a href="#" class="footer-logo">Café Sensorial</a>
+                <p class="footer-desc">
+                    Donde la alquimia del grano se encuentra con la precisión del diseño. Una experiencia inmersiva para
+                    los sentidos.
+                </p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon interactable"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon interactable"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon interactable"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-icon interactable"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-nav">
+                <h4 class="footer-header">Explorar</h4>
+                <a href="#about" class="interactable">Nuestra Esencia</a>
+                <a href="#menu" class="interactable">Carta de Autor</a>
+                <a href="#contact" class="interactable">Reservaciones</a>
+                <a href="#" class="interactable">Masterclass</a>
+            </div>
+
+            <div class="footer-nav">
+                <h4 class="footer-header">Contacto</h4>
+                <a href="#" class="interactable">Arequipa, Perú</a>
+                <a href="#" class="interactable">hola@cafesensorial.pe</a>
+                <a href="#" class="interactable">+51 987 654 321</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 Café Sensorial. Todos los derechos reservados.</p>
+            <p style="opacity: 0.6;">Diseño Integrado &bull; Privacy Policy</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const overlay = document.querySelector('.loader-overlay');
+        const countText = document.getElementById('loader-count');
+        const bar = document.getElementById('loader-bar');
+        let progress = 0;
+
+        const interval = setInterval(() => {
+            progress += Math.floor(Math.random() * 5) + 2;
+            if (progress > 100) progress = 100;
+            countText.textContent = `${progress}%`;
+            bar.style.width = `${progress}%`;
+
+            if (progress === 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    overlay.classList.add('hide');
+                    document.body.classList.add('loaded');
+                    setTimeout(revealHero, 400);
+                    // Inicializar AOS después de cargar
+                    AOS.init({ duration: 1000, once: true, offset: 50 });
+                }, 500);
+            }
+        }, 40);
+
+        // --- 2. HERO ANIMATION ---
+        function revealHero() {
+            const spans = document.querySelectorAll("#hero-title span");
+            const hero = document.querySelector(".hero");
+            spans.forEach((span, i) => {
+                setTimeout(() => {
+                    span.style.transition = "opacity 0.8s ease, transform 1s cubic-bezier(0.2, 1, 0.3, 1)";
+                    span.style.opacity = 1;
+                    span.style.transform = "translateY(0)";
+                }, i * 120);
+            });
+            setTimeout(() => { hero.classList.add("active"); }, spans.length * 120 + 200);
+        }
+
+        // --- 3. CUSTOM CURSOR ---
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorRing = document.querySelector('.cursor-ring');
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
+            cursorDot.style.left = `${mouseX}px`; cursorDot.style.top = `${mouseY}px`;
+        });
+
+        const animateCursor = () => {
+            ringX += (mouseX - ringX) * 0.15;
+            ringY += (mouseY - ringY) * 0.15;
+            cursorRing.style.left = `${ringX}px`; cursorRing.style.top = `${ringY}px`;
+            requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        document.querySelectorAll('.interactable, a, button, input').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // --- 4. MAPA DE AREQUIPA (Estilo Futurista) ---
+        const map = L.map('map').setView([-16.3988, -71.5350], 15); // Arequipa
+
+        // Usamos CartoDB Dark Matter para que coincida con el tema negro
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
+        const customIcon = L.divIcon({
+            html: '<div style="background:var(--neon-gold); width:12px; height:12px; border-radius:50%; box-shadow:0 0 10px var(--neon-gold);"></div>',
+            className: 'custom-div-icon'
+        });
+
+        L.marker([-16.3988, -71.5350], { icon: customIcon }).addTo(map)
+            .bindPopup("Café Sensorial HQ")
+            .openPopup();
+
+        // Evento click en mapa
+        map.on('click', function (e) {
+            const coord = e.latlng;
+            document.getElementById('direccion').value = `${coord.lat.toFixed(4)}, ${coord.lng.toFixed(4)}`;
+            // Efecto visual en input
+            const label = document.querySelector('#direccion + label span');
+            if (label) label.parentElement.parentElement.querySelector('input').focus();
+        });
+
+        // Prevenir envío real del form para demo
+        document.getElementById('bookingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.querySelector('.btn-draw');
+            const originalText = btn.querySelector('.button__text').textContent;
+            btn.querySelector('.button__text').textContent = "¡Reservado!";
+            setTimeout(() => {
+                btn.querySelector('.button__text').textContent = originalText;
+                document.getElementById('bookingForm').reset();
+            }, 3000);
+        });
+        // ================= COMET CARD 3D EFFECT =================
+        document.querySelectorAll(".card").forEach(card => {
+            const inner = card.querySelector(".card-inner");
+            const glow = card.querySelector(".comet-glow");
+
+            card.addEventListener("mousemove", e => {
+                const rect = card.getBoundingClientRect();
+
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const rotateX = -(y - centerY) / 18;
+                const rotateY = (x - centerX) / 18;
+
+                inner.style.transform = `
+      rotateX(${rotateX}deg)
+      rotateY(${rotateY}deg)
+      scale(1.02)
+    `;
+
+                glow.style.setProperty("--x", `${x}px`);
+                glow.style.setProperty("--y", `${y}px`);
+            });
+
+            card.addEventListener("mouseleave", () => {
+                inner.style.transform = "rotateX(0) rotateY(0) scale(1)";
+            });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const cartModal = document.getElementById('cartModal');
+            const cartIcon = document.getElementById('cartIcon');
+            const closeCartBtn = document.getElementById('closeCart');
+            const cartBadge = document.getElementById('cartBadge');
+            const cartContent = document.getElementById('cartContent');
+
+            /* 🔴 Seguridad extra */
+            if (!cartModal || !cartIcon || !closeCartBtn) {
+                console.error('❌ Elementos del carrito no encontrados en el DOM');
+                return;
+            }
+
+            function updateCartBadge() {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                cartBadge.style.display = totalItems ? 'flex' : 'none';
+                cartBadge.textContent = totalItems;
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            function addToCart(name, price, image) {
+                const item = cart.find(p => p.name === name);
+                item ? item.quantity++ : cart.push({ name, price: +price, image, quantity: 1 });
+                updateCartBadge();
+            }
+
+            function renderCart() {
+                if (!cart.length) {
+                    cartContent.innerHTML = `
+                <div class="cart-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Tu carrito está vacío</p>
+                </div>`;
+                    return;
+                }
+
+                const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+
+                cartContent.innerHTML = `
+            <div class="cart-items">
+                ${cart.map((item, i) => `
+                    <div class="cart-item">
+                        <img src="${item.image}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">S/.${item.price.toFixed(2)}</div>
+                            <div class="cart-item-controls">
+                                <button class="quantity-btn" data-action="dec" data-index="${i}">-</button>
+                                <span class="quantity-display">${item.quantity}</span>
+                                <button class="quantity-btn" data-action="inc" data-index="${i}">+</button>
+                            </div>
+                        </div>
+                        <button class="remove-item-btn" data-index="${i}">×</button>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total</span>
+                    <span class="cart-total-amount">S/.${total.toFixed(2)}</span>
+                </div>
+                <button class="checkout-btn" id="checkoutBtn">Proceder al Pago</button>
+            </div>
+        `;
+            }
+
+            /* Eventos */
+
+            cartIcon.addEventListener('click', () => {
+                cartModal.classList.add('active');
+                renderCart();
+            });
+
+            closeCartBtn.addEventListener('click', () => {
+                cartModal.classList.remove('active');
+            });
+
+            cartModal.addEventListener('click', (e) => {
+                if (e.target === cartModal) {
+                    cartModal.classList.remove('active');
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                if (e.target.matches('.add-to-cart-btn')) {
+                    addToCart(
+                        e.target.dataset.name,
+                        e.target.dataset.price,
+                        e.target.dataset.image
+                    );
+                }
+
+                if (e.target.matches('.quantity-btn')) {
+                    const i = +e.target.dataset.index;
+                    e.target.dataset.action === 'inc' ? cart[i].quantity++ : cart[i].quantity--;
+                    if (cart[i].quantity < 1) cart.splice(i, 1);
+                    updateCartBadge();
+                    renderCart();
+                }
+
+                if (e.target.matches('.remove-item-btn')) {
+                    cart.splice(+e.target.dataset.index, 1);
+                    updateCartBadge();
+                    renderCart();
+                }
+
+                if (e.target.id === 'checkoutBtn') {
+                    Swal.fire('Pedido confirmado', 'Gracias por tu compra', 'success');
+                    cart = [];
+                    updateCartBadge();
+                    renderCart();
+                    cartModal.classList.remove('active');
+                }
+            });
+
+            updateCartBadge();
+        });
+
+    </script>
+    <div class="cart-modal-overlay" id="cartModal">
+        <div class="cart-modal">
+            <div class="cart-modal-header">
+                <h2 class="cart-modal-title">Tu Carrito</h2>
+                <button class="cart-close-btn interactable" id="closeCart">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="cartContent"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>
